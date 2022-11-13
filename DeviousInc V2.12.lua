@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+  local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.1", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
@@ -122,6 +122,7 @@ _G.BloodFarm = false
 _G.AutoPickUpGold = false
 _G.CoinpressGold = false
 local toplant = 'None'
+
 -- functions
 
 function PickUpPlant()
@@ -665,56 +666,6 @@ Teleports:AddButton({
 })
 
 Buttons:AddButton({
-	Name = "Pumpkin ESP",
-	Callback = function()
-for __,v in pairs(game.workspace.pumpkins:GetDescendants()) do -- the path
- if v.Name == "Reference" then -- the item
-   local a = Instance.new("BillboardGui",v) -- pretty much explains everything
-   a.Name = "zxy"
-   a.Size = UDim2.new(10,0, 10,0)
-   a.AlwaysOnTop = true
-   local b = Instance.new("Frame",a)
-   b.Size = UDim2.new(1,0, 1,0)
-   b.BackgroundTransparency = 0.80
-   b.BorderSizePixel = 0
-   b.BackgroundColor3 = Color3.new(0, 255, 0)
-   local c = Instance.new('TextLabel',b)
-   c.Size = UDim2.new(2,0,2,0)
-   c.BorderSizePixel = 0
-   c.TextSize = 20
-   c.Text = '.'
-   c.BackgroundTransparency = 1
- end
-end
-    end
-})
-
-Buttons:AddButton({
-	Name = "VoidPumpkin ESP",
-	Callback = function()
-for __,v in pairs(game.workspace.Pumpkins:GetDescendants()) do -- the path
- if v.Name == "Reference" then -- the item
-   local a = Instance.new("BillboardGui",v) -- pretty much explains everything
-   a.Name = "zxy"
-   a.Size = UDim2.new(10,0, 10,0)
-   a.AlwaysOnTop = true
-   local b = Instance.new("Frame",a)
-   b.Size = UDim2.new(1,0, 1,0)
-   b.BackgroundTransparency = 0.80
-   b.BorderSizePixel = 0
-   b.BackgroundColor3 = Color3.new(0, 255, 0)
-   local c = Instance.new('TextLabel',b)
-   c.Size = UDim2.new(2,0,2,0)
-   c.BorderSizePixel = 0
-   c.TextSize = 20
-   c.Text = '.'
-   c.BackgroundTransparency = 1
- end
-end
-    end
-})
-
-Buttons:AddButton({
     Name = 'Hide Tribe Totem',
     Callback = function()
         local LocalPlayer = game:GetService("Players").LocalPlayer
@@ -737,6 +688,41 @@ Buttons:AddButton({
         
         Remote:FireServer("Tribe Totem", cframe * CFrame.new(0, -4.5, -25), 0)
         Remote:FireServer("God Hut", cframe * CFrame.new(0, -2.8, -25), 0)
+    end
+})
+
+Buttons:AddButton({
+	Name = "Water Walker",
+	Callback = function()
+        local mt = getrawmetatable(game)
+        local oldIndex = mt.__index
+        local oldNIndex = mt.__newindex
+        
+        if setreadonly then
+        setreadonly(mt,false)
+        else
+        make_writeable(mt)
+        end
+        
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        
+        mt.__index = function(self,i)
+        if i == "WalkSpeed" then 
+        return 16
+        elseif i == "Velocity" then
+            return Vector3.new(0,0,0)
+        end
+        return oldIndex(self,i)
+        end
+
+        mt.__newindex = function(self,i,v)
+        if i == "WalkSpeed" then 
+        return
+        elseif i == "Velocity" then
+            return  
+        end
+        return oldNIndex(self,i,v)
+        end
     end
 })
 
@@ -1466,3 +1452,5 @@ GoldFarming:AddButton({
     Pickupcoins(game.Players.LocalPlayer.Character)
     end
 })
+
+OrionLib:Innit()
