@@ -1453,4 +1453,4 @@ GoldFarming:AddButton({
     end
 })
 
-OrionLib:Innit()
+OrionLib:Init()
