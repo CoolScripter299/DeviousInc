@@ -455,7 +455,6 @@ function IceAura()
                         if v and not v:FindFirstChild("Humanoid") and v:FindFirstChild("Health") then
                             for i2,v2 in pairs(v:GetChildren()) do
                                 if v2:IsA("BasePart") and v2.Color == Color3.fromRGB(118, 133, 134) then
-                                    local realDistance = math.abs((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v2.Position).Magnitude)
                                     part = v2
                                 end
                             end
