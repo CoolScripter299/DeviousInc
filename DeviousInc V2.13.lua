@@ -446,10 +446,10 @@ end
 function IceAura()
     while _G.IceAura == true do 
         if _G.IceAura == true then
-            task.wait(0.2)
+            task.wait(0.5)
             for i, v in pairs(Workspace:GetChildren()) do
                 if string.find(v.Name, 'Ice Chunk') then
-                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Ice.Position).Magnitude <= 40 then
+                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Ice.Position).Magnitude <= 25 then
                         game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(game:GetService("ReplicatedStorage").RelativeTime.Value, {v.Ice})
                     end
                 end
