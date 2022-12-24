@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.13", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.12", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -455,7 +455,7 @@ function IceAura()
                         if v and not v:FindFirstChild("Humanoid") and v:FindFirstChild("Health") then
                             for i2,v2 in pairs(v:GetChildren()) do
                                 if v2:IsA("BasePart") and v2.Color == Color3.fromRGB(118, 133, 134) then
-                                    local realDistance = math.abs((HRPPosition - v2.Position).Magnitude)
+                                    local realDistance = math.abs((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v2.Position).Magnitude)
                                     part = v2
                                 end
                             end
