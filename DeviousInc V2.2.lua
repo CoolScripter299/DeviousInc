@@ -556,7 +556,7 @@ function AutoPickUpGold(Character)
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
-    task.wait(5)
+    task.wait(1)
 end
 end
 end
@@ -1278,7 +1278,7 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
-    wait(0.05)
+    wait()
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
@@ -1305,7 +1305,6 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
-    wait(0.05)
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
@@ -1332,7 +1331,6 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
-    wait(0.05)
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
@@ -1359,7 +1357,6 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
-    wait(0.05)
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
