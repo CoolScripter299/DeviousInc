@@ -445,45 +445,37 @@ end
 
 function IceAura()
     while _G.IceAura == true do 
-    if _G.IceAura == true then
-        task.wait()
-local function IceAura2(folder)
-    local distance, part = 1000
-    local Character = game:GetService("Players").LocalPlayer.Character
-    if Character:FindFirstChild("HumanoidRootPart") then
-        for i,v in pairs(folder:GetChildren()) do
-            if v and not v:FindFirstChild("Humanoid") and v:FindFirstChild("Health") then
-                local HRPPosition = Character:FindFirstChild("HumanoidRootPart").Position
-                for i2,v2 in pairs(v:GetChildren()) do
-                    if v2:IsA("BasePart") and v.Color == Color3.fromRGB(118, 133, 134) then
-                        local realDistance = math.abs((HRPPosition - v2.Position).Magnitude)
-        
-                        if realDistance < distance then
-                            distance = realDistance
-                            part = v2
+        if _G.IceAura == true then
+            task.wait()
+            local part
+            local function IceAura2(folder)
+            local Character = game:GetService("Players").LocalPlayer.Character
+                if Character:FindFirstChild("HumanoidRootPart") then
+                    for i,v in pairs(folder:GetChildren()) do
+                        if v and not v:FindFirstChild("Humanoid") and v:FindFirstChild("Health") then
+                            for i2,v2 in pairs(v:GetChildren()) do
+                                if v2:IsA("BasePart") and v2.Color == Color3.fromRGB(118, 133, 134) then
+                                    local realDistance = math.abs((HRPPosition - v2.Position).Magnitude)
+                                    part = v2
+                                end
+                            end
                         end
+                    end
+                end
+                return part
+            end
+            while task.wait(0.2) do
+                if _G.IceAura == true then
+                    local Character = game:GetService("Players").LocalPlayer.Character
+                    local hrp = Character.HumanoidRootPart.Position
+                    local Ice = IceAura2(workspace)
+                    if (hrp - Ice.Position).Magnitude <= 40 then
+                        game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(game:GetService("ReplicatedStorage").RelativeTime.Value, Ice)
                     end
                 end
             end
         end
     end
-    return part
-end
-
-while task.wait(0.2) do
-    if _G.IceAura == true then
-    local Character = game:GetService("Players").LocalPlayer.Character
-    local hrp = Character.HumanoidRootPart.Position
-        local closestPart = IceAura2(workspace)
-        if (hrp - closestPart.Position).Magnitude <= 40 then
-            game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(game:GetService("ReplicatedStorage").RelativeTime.Value, {
-                [1] = closestPart
-            })
-    end
-end
-end
-end
-end
 end
 
 function OpPlant()
