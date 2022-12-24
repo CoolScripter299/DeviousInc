@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.12", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.14", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -446,30 +446,11 @@ end
 function IceAura()
     while _G.IceAura == true do 
         if _G.IceAura == true then
-            task.wait()
-            local part
-            local function IceAura2(folder)
-            local Character = game:GetService("Players").LocalPlayer.Character
-                if Character:FindFirstChild("HumanoidRootPart") then
-                    for i,v in pairs(folder:GetChildren()) do
-                        if v and not v:FindFirstChild("Humanoid") and v:FindFirstChild("Health") then
-                            for i2,v2 in pairs(v:GetChildren()) do
-                                if v2:IsA("BasePart") and v2.Color == Color3.fromRGB(118, 133, 134) then
-                                    part = v2
-                                end
-                            end
-                        end
-                    end
-                end
-                return part
-            end
-            while task.wait(0.2) do
-                if _G.IceAura == true then
-                    local Character = game:GetService("Players").LocalPlayer.Character
-                    local hrp = Character.HumanoidRootPart.Position
-                    local Ice = IceAura2(workspace)
-                    if (hrp - Ice.Position).Magnitude <= 40 then
-                        game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(game:GetService("ReplicatedStorage").RelativeTime.Value, Ice)
+            task.wait(0.2)
+            for i, v in pairs(Workspace:GetChildren()) do
+                if string.find(v.Name, 'Ice Chunk') then
+                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Ice.Position).Magnitude <= 40 then
+                        game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(game:GetService("ReplicatedStorage").RelativeTime.Value, {v.Ice})
                     end
                 end
             end
