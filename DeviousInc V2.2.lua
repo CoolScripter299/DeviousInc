@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.14", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.2", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -137,7 +137,7 @@ end
 function AutoPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace.Deployables:GetChildren()) do
-        if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 30 then
+        if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
             game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
         end
     end
@@ -413,34 +413,39 @@ end
 
 function GoldFarm()
     while _G.GoldFarm == true do
-    if _G.GoldFarm == true then
-        task.wait(0.2)
-
-    local tween_s = game:GetService('TweenService')
-    local tweeninfo = TweenInfo.new(0.5,Enum.EasingStyle.Linear)
-    local lp = game.Players.LocalPlayer
-
-function autofarm(v)
-    if lp.Character and
-    lp.Character:FindFirstChild('HumanoidRootPart') then
-    
-        local cf = CFrame.new(v)
-        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
-        a:Play()
-        a.Completed:wait()
-    end
-end
-
-autofarm(teleport_table.location1)
-    task.wait(0.4)
-autofarm(teleport_table.location2)
-    task.wait(0.4)
-autofarm(teleport_table.location3)
-    task.wait(0.4)
-autofarm(teleport_table.location4)
-    task.wait(0.2)
-end
-end
+        if _G.GoldFarm == true then
+            task.wait()
+            local tween_s = game:GetService('TweenService')
+            local tweeninfo = TweenInfo.new(0.35,Enum.EasingStyle.Linear)
+            local lp = game.Players.LocalPlayer
+            
+            function autofarm(v)
+                if lp.Character and lp.Character:FindFirstChild('HumanoidRootPart') then
+                    local cf = CFrame.new(v)
+                    local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+                    a:Play()
+                    a.Completed:wait()
+                end
+            end
+            
+            function GetIce()
+                for i, v in pairs(game.Workspace:GetChildren()) do
+                    if v:IsA('Model') and v.Name == 'Ice Chunk' then
+                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Ice.Position).Magnitude < 50 then
+                            v = v.Ice.Position
+                            return v
+                        end
+                    end
+                end
+            end
+            local NearestIce = GetIce()
+            if NearestIce then
+                autofarm(NearestIce + Vector3.new(0, 8, 0))
+            else
+                autofarm(Vector3.new(911, -2, -1411))
+            end
+        end
+        end
 end
 
 function IceAura()
@@ -1273,6 +1278,7 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
+    wait(0.05)
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
@@ -1299,6 +1305,7 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
+    wait(0.05)
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
@@ -1325,6 +1332,7 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
+    wait(0.05)
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
@@ -1351,6 +1359,7 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
+    wait(0.05)
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
