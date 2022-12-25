@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.2", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.2", HidePremium = false,IntroText = "To Calamity; the best tester...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -1278,7 +1278,6 @@ GoldFarming:AddButton({
     for i,v in pairs(Objects) do
     for i=1,10 do
     v.Position = myPos
-    wait()
     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
     end
     end
