@@ -102,7 +102,7 @@ local Credits = Window:MakeTab({
 --Gloabls and important locals
 
 _G.AutoBlood = false
-_G.AutoBloodVoid = false
+_G.AutoBlood = false
 _G.AutoMine = false
 _G.AutoShield = false
 local amine = false
@@ -676,7 +676,7 @@ Misc:AddDropdown({
 Teleports:AddButton({
     Name = "Void Tp",
     Callback = function()
-    game:GetService("TeleportService"):Teleport(10767870749)
+    game:GetService("TeleportService"):Teleport(11879754496)
     end
 })
 
