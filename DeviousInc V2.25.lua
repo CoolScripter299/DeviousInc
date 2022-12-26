@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.2", HidePremium = false,IntroText = "To Calamity; the best tester...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.25", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -581,16 +581,33 @@ for i,v in pairs(workspace.Deployables:GetDescendants()) do
 end
 end
 
--- Gui stuff 
+function GetNearestPlayerForHutTrapping()
+    local range = 55
+    local closestplayer
+    for _, a in pairs(game.Players:GetChildren()) do
+        if a ~= game.Players.LocalPlayer then
+            if a.TeamColor == game.Players.LocalPlayer.TeamColor then a = nil
+            else
+                local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character:FindFirstChild('HumanoidRootPart', true).Position).Magnitude
+                if distance < range then
+                    range = distance
+                    closestplayer = a
+                    for i, v in pairs(closestplayer.Character:GetDescendants()) do
+                        if v.Name == 'HumanoidRootPart' then
+                            if closestplayer then
+                                v = v.Position
+                                return v, closestplayer
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
-Misc:AddBind({
-	Name = "Auto Heal [40 HP/Click]",
-	Default = Enum.KeyCode.J,
-	Hold = false,
-	Callback = function()
-		KeyBindBloodfruit()
-	end    
-})
+
+-- Gui stuff 
 
 Misc:AddBind({
     Name = "God Armour Equip",
@@ -633,6 +650,27 @@ Misc:AddBind({
        amine = false
   	end
   	end    
+})
+
+Misc:AddBind({
+    Name = 'Hut Nearest Player',
+    Default = Enum.KeyCode.M,
+    Hold = false,
+    Callback = function()
+        HutNearestplayer = GetNearestPlayerForHutTrapping()
+        if HutNearestplayer then
+            game:GetService("ReplicatedStorage").Events.PlaceStructure:FireServer(HutType1, CFrame.new(HutNearestplayer - Vector3.new(8, 3, 0)), 0)
+        end
+    end
+})
+
+Misc:AddDropdown({
+	Name = "Hut Type",
+	Default = "Big Ol' Hut",
+	Options = {"Big Ol' Hut", "God Hut"},
+	Callback = function(Value)
+		HutType1 = Value
+	end    
 })
 
 Teleports:AddButton({
@@ -704,23 +742,38 @@ Buttons:AddButton({
 })
 
 Buttons:AddButton({
-    Name = 'AntiAfk',
-    Default = false,
+    Name = 'Accurate Bullet(TESTING; calamity dont be a fucking idiot)',
     Callback = function()
-local vu = game:GetService("VirtualUser")
-game:GetService("Players").LocalPlayer.Idled:connect(function()
-   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-   wait(1)
-   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-end)
-
-OrionLib:MakeNotification({
-	Name = "AntiAfk Notifier",
-	Content = "AntiAfk has been turned on!",
-	Image = "rbxassetid://4483345998",
-	Time = 5
+        local range = 50
+        for i, v in pairs(game.Players:GetChildren()) do
+            if v ~= game.Players.LocalPlayer then
+                for i2, v2 in pairs(v.Character:GetDescendants()) do
+                    if v2.Name == 'HumanoidRootPart' and (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v2.Position).magnitude < range then
+                        game:GetService("ReplicatedStorage").Events.VoodooSpell:FireServer(v2.Position)
+                    end
+                end
+            end
+        end
+    end
 })
-end
+
+Buttons:AddButton({
+    Name = 'AntiAfk',
+    Callback = function()
+        OrionLib:MakeNotification({
+        Name = "AntiAfk Notifier",
+        Content = "AntiAfk has been turned on!",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
+        
+        local vu = game:GetService("VirtualUser")
+        game:GetService("Players").LocalPlayer.Idled:connect(function()
+        vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+        wait(1)
+        vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+        end)
+    end
 })
 
 local dest = Buttons:AddSection({
@@ -1078,8 +1131,8 @@ Toggles:AddToggle({
     Name = "Auto Shield",
     Default = false,
     Callback = function(Value)
-            _G.AutoShield = Value
-    AutoShield()
+        _G.AutoShield = Value
+        AutoShield()
     end
 })
 
