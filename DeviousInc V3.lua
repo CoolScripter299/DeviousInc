@@ -135,53 +135,39 @@ function AccurateBullet()
     while _G.AccurateBullet == true do
         if _G.AccurateBullet == true then
             wait()
+            if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
+                game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
+            end
+            local function IsPlayerNear()
+                local dist = 230
+                for _, a in pairs(game.Players:GetPlayers()) do
+                    if a ~= game.Players.LocalPlayer and a.TeamColor ~= game.Players.LocalPlayer.TeamColor then
+                        local realdistance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character.HumanoidRootPart.Position).magnitude
+                        if realdistance < dist then
+                            return true
+                        end
+                    end
+                end
+            end
+            
             local function ClosestPlayerToMouse()
                 local target = nil
                 local dist = math.huge
                 for i,v in pairs(game.Players:GetPlayers()) do
-                    if v ~= game.Players.LocalPlayer then
-                        if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
-                            game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
-                        else
-                            if v.TeamColor == game.Players.LocalPlayer.TeamColor then
-                                v = nil
-                            else
-                                local mouse = game.Players.LocalPlayer:GetMouse()
-                                local screenpoint = game.Workspace.CurrentCamera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
-                                local playertomouse = (Vector2.new(mouse.X,mouse.Y)-Vector2.new(screenpoint.X,screenpoint.Y)).magnitude
-                                if playertomouse < dist then
-                                    dist = playertomouse
-                                    target = v.Character.HumanoidRootPart.Position
-                                    return target
-                                end
-                            end
+                    if v ~= game.Players.LocalPlayer and v.TeamColor ~= game.Players.LocalPlayer.TeamColor then
+                        local mouse = game.Players.LocalPlayer:GetMouse()
+                        local screenpoint = game.Workspace.CurrentCamera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
+                        local playertomouse = (Vector2.new(mouse.X,mouse.Y)-Vector2.new(screenpoint.X,screenpoint.Y)).magnitude
+                        if playertomouse < dist and IsPlayerNear() then
+                            dist = playertomouse
+                            target = v.Character.HumanoidRootPart.Position
+                            return target
                         end
                     end
                 end
             end
             
-            local function IsPlayerNear()
-                local dist = 230
-                for _, a in pairs(game.Players:GetPlayers()) do
-                    if a ~= game.Players.LocalPlayer then
-                        if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
-                            game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
-                        else
-                            if a.TeamColor == game.Players.LocalPlayer.TeamColor then
-                                a = nil
-                            else
-                                local realdistance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character.HumanoidRootPart.Position).magnitude
-                                if realdistance < dist then
-                                    return true
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-            
-            ClosestPlayerToMouse()
-            if ClosestPlayerToMouse() and IsPlayerNear() then
+            if ClosestPlayerToMouse() then
                 FireAccurateBullet = game:GetService('UserInputService').InputBegan:Connect(function(Key)
                     if Key.KeyCode == Enum.KeyCode.V then
                         game:GetService("ReplicatedStorage").Events.VoodooSpell:FireServer(ClosestPlayerToMouse())
@@ -778,6 +764,7 @@ Misc:AddBind({
         if HutNearestplayer then
             game:GetService("ReplicatedStorage").Events.PlaceStructure:FireServer(HutType1, CFrame.new(HutNearestplayer - Vector3.new(-7, 1, 0)), 0)
         end
+        game.Players.LocalPlayer.TeamColor = BrickColor.new('CGA brown')
     end
 })
 
@@ -1219,6 +1206,9 @@ Toggles:AddToggle({
     Callback = function(Value)
         _G.AccurateBullet = Value
         AccurateBullet()
+        if game.Players.LocalPlayer.TeamColor == BrickColor.new('Really black') then
+            game.Players.LocalPlayer.TeamColor = BrickColor.new('CGA brown')
+        end
     end
 })
 
