@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V3", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V3.1", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -131,54 +131,54 @@ _G.AccurateBullet = false
 
 -- functions
 
-function AccurateBullet()
+function AccurateBulletMain()
     while _G.AccurateBullet == true do
-        if _G.AccurateBullet == true then
-            wait()
-            if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
-                game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
-            end
-            local function IsPlayerNear()
+        wait()
+        if game.Players.LocalPlayer.TeamColor == BrickColor.new("CGA brown") then
+            game.Players.LocalPlayer.TeamColor = BrickColor.new("Really black")
+        else
+            function __IsPlayerNear()
                 local dist = 230
                 for _, a in pairs(game.Players:GetPlayers()) do
                     if a ~= game.Players.LocalPlayer and a.TeamColor ~= game.Players.LocalPlayer.TeamColor then
                         local realdistance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character.HumanoidRootPart.Position).magnitude
                         if realdistance < dist then
-                            return true
                         end
                     end
                 end
+                return true
             end
-            
-            local function ClosestPlayerToMouse()
+            function __ClosestPlayerToMouse()
                 local target = nil
                 local dist = math.huge
                 for i,v in pairs(game.Players:GetPlayers()) do
                     if v ~= game.Players.LocalPlayer and v.TeamColor ~= game.Players.LocalPlayer.TeamColor then
                         local mouse = game.Players.LocalPlayer:GetMouse()
                         local screenpoint = game.Workspace.CurrentCamera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
-                        local playertomouse = (Vector2.new(mouse.X,mouse.Y)-Vector2.new(screenpoint.X,screenpoint.Y)).magnitude
-                        if playertomouse < dist and IsPlayerNear() then
+                        local playertomouse = (Vector2.new(mouse.X,mouse.Y) - Vector2.new(screenpoint.X,screenpoint.Y)).magnitude
+                        if playertomouse < dist then
                             dist = playertomouse
                             target = v.Character.HumanoidRootPart.Position
-                            return target
                         end
                     end
                 end
-            end
-            
-            if ClosestPlayerToMouse() then
-                FireAccurateBullet = game:GetService('UserInputService').InputBegan:Connect(function(Key)
-                    if Key.KeyCode == Enum.KeyCode.V then
-                        game:GetService("ReplicatedStorage").Events.VoodooSpell:FireServer(ClosestPlayerToMouse())
-                        FireAccurateBullet:Disconnect()
-                    end
-                end)
+                return target
             end
         end
     end
 end
 
+function AccurateBullet()
+    if _G.AccurateBullet == true then
+        __ClosestPlayerToMouse()
+        __IsPlayerNear()
+        if __ClosestPlayerToMouse() and __IsPlayerNear() then
+            game:GetService("ReplicatedStorage").Events.VoodooSpell:FireServer(__ClosestPlayerToMouse())
+            game:GetService("ReplicatedStorage").Events.VoodooSpell:FireServer(__ClosestPlayerToMouse())
+            game:GetService("ReplicatedStorage").Events.VoodooSpell:FireServer(__ClosestPlayerToMouse())
+        end
+    end
+end
 
 function TweenPoints()
     while _G.TweenPoints == true do
@@ -1199,14 +1199,24 @@ Toggles:AddToggle({
 })
 
 Toggles:AddToggle({
-    Name = "Accurate Bullet(fires all 3 at once)",
+    Name = "Accurate Bullet(accurately shoots all 3 voodoo bolts)",
     Default = false,
     Callback = function(Value)
         _G.AccurateBullet = Value
-        AccurateBullet()
-        if game.Players.LocalPlayer.TeamColor == BrickColor.new('Really black') then
-            game.Players.LocalPlayer.TeamColor = BrickColor.new('CGA brown')
+        AccurateBulletMain()
+        if _G.AccurateBullet == false then
+            if game.Players.LocalPlayer.TeamColor == BrickColor.new("Really black") then
+                game.Players.LocalPlayer.TeamColor = BrickColor.new("CGA brown")
+            end
         end
+    end
+})
+
+Toggles:AddBind({
+    Name = 'Accurate Bullet Keybind',
+    Default = Enum.KeyCode.Q,
+    Callback = function()
+        AccurateBullet()
     end
 })
 
@@ -1393,7 +1403,7 @@ GoldFarming:AddButton({
    local function AutoPickup2(Character)
     local myPos = Character.HumanoidRootPart.Position
     local Objects = {}
-    for i,v in pairs(workspace:GetChildren()) do
+    for i,v in pairs(workspace.Items:GetChildren()) do
         if v:FindFirstChild("Pickup") ~= nil and v.ClassName == "UnionOperation" and v.Color == Color3.fromRGB(218, 165, 50) then
             local Pos = v.Position
             local Distance = (myPos - Pos).magnitude
@@ -1445,7 +1455,7 @@ GoldFarming:AddButton({
     local function AutoPickup4(Character)
     local myPos = Character.HumanoidRootPart.Position
     local Objects = {}
-    for i,v in pairs(workspace:GetChildren()) do
+    for i,v in pairs(workspace.Items:GetChildren()) do
         if v:FindFirstChild("Pickup") ~= nil and v.ClassName == "Part" and v.Color == Color3.fromRGB(218, 165, 50) then
             local Pos = v.Position
             local Distance = (myPos - Pos).magnitude
