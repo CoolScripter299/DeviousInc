@@ -199,43 +199,29 @@ function TweenPoints()
         if _G.TweenPoints == true then
             wait()
             local chrpos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-            
-            local __TweenTable1 = {
-            RealDistance1 = (chrpos - __TweenPlace1).magnitude
+            local Check_Table = {
+                __TweenPlace1,
+                __TweenPlace2,
+                __TweenPlace3,
+                __TweenPlace4,
+                __TweenPlace5,
+                __TweenPlace6,
+                __TweenPlace7,
+                __TweenPlace8,
+                __TweenPlace9,
+                __TweenPlace10
             }
             
-            if __TweenPlace2 then
-                local __TweenTable2 = {
-                RealDistance6 = (chrpos - __TweenPlace2).magnitude
-                }
-            end
+            local __TweenTable = {}
             
-            if __TweenPlace3 then
-                local __TweenTable3 = {
-                RealDistance6 = (chrpos - __TweenPlace3).magnitude
-                }
-            end
-            
-            if __TweenPlace4 then
-                local __TweenTable4 = {
-                RealDistance6 = (chrpos - __TweenPlace4).magnitude
-                }
-            end
-            
-            if __TweenPlace5 then
-                local __TweenTable5 = {
-                RealDistance6 = (chrpos - __TweenPlace5).magnitude
-                }
-            end
-            
-            if __TweenPlace6 then
-                local __TweenTable6 = {
-                RealDistance6 = (chrpos - __TweenPlace6).magnitude
-                }
+            for i, v in pairs(Check_Table) do
+                if v ~= nil then
+                    table.insert(__TweenTable, (chrpos - v).magnitude)
+                end
             end
             
             local function GetInputtedTweens()
-                for i, v in pairs(__TweenTable1, __TweenTable2, __TweenTable3, __TweenTable4, __TweenTable5, __TweenTable6) do
+                for i, v in ipairs(__TweenTable) do
                     if v ~= nil then 
                         return math.round(v)
                     end
@@ -254,34 +240,22 @@ function TweenPoints()
                     local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
                     a:Play()
                     if _G.TweenPoints == false then 
-                        a:Pause()
+                        a:Cancel()
                     else
                         a.Completed:wait()
                     end
                 end
             end
-            
-            
-            autotween(__TweenPlace1)
-            if __TweenPlace2 then
-                autotween(__TweenPlace2)
-                if __TweenPlace3 then
-                    autotween(__TweenPlace3)
-                    if __TweenPlace4 then
-                        autotween(__TweenPlace4)
-                        if __TweenPlace5 then
-                            autotween(__TweenPlace5)
-                            if __TweenPlace6 then
-                                autotween(__TweenPlace6)
-                            end
-                        end
-                    end
+            for _, a in ipairs(Check_Table) do
+                if a ~= nil then
+                    autotween(a)
                 end
             end
         end
     end
 end
 
+    
 function PickUpPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace:GetChildren()) do
@@ -1602,6 +1576,10 @@ TweenPlace:AddButton({
         __TweenPlace4 = nil
         __TweenPlace5 = nil
         __TweenPlace6 = nil
+        __TweenPlace7 = nil
+        __TweenPlace8 = nil
+        __TweenPlace9 = nil
+        __TweenPlace10 = nil
     end
 })
 
@@ -1644,6 +1622,34 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 6',
     Callback = function()
         __TweenPlace6 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 7',
+    Callback = function()
+        __TweenPlace7 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 8',
+    Callback = function()
+        __TweenPlace8 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 9',
+    Callback = function()
+        __TweenPlace9 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 10',
+    Callback = function()
+        __TweenPlace10 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
     end
 })
 
