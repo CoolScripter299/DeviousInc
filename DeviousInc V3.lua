@@ -213,10 +213,13 @@ function TweenPoints()
             }
             
             local __TweenTable = {}
+            local __OrganizedTable = {}
+            
             
             for i, v in pairs(Check_Table) do
                 if v ~= nil then
                     table.insert(__TweenTable, (chrpos - v).magnitude)
+                    table.insert(__OrganizedTable, v)
                 end
             end
             
@@ -246,7 +249,7 @@ function TweenPoints()
                     end
                 end
             end
-            for _, a in ipairs(Check_Table) do
+            for _, a in ipairs(__OrganizedTable) do
                 if a ~= nil then
                     autotween(a)
                 end
