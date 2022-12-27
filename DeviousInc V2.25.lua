@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V2.25", HidePremium = false,IntroText = "To Calamity; the best tester...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V3", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -93,6 +93,12 @@ local GoldFarming = Window:MakeTab({
 	PremiumOnly = false
 	})
 
+local TweenPlace = Window:MakeTab({
+	Name = "Tween Points",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+	})
+
 local Credits = Window:MakeTab({
 	Name = "Credits",
 	Icon = "rbxassetid://4483345998",
@@ -102,7 +108,7 @@ local Credits = Window:MakeTab({
 --Gloabls and important locals
 
 _G.AutoBlood = false
-_G.AutoBlood = false
+_G.AutoBloodVoid = false
 _G.AutoMine = false
 _G.AutoShield = false
 local amine = false
@@ -116,14 +122,165 @@ _G.AutoEatNaked = false
 _G.GoldFarm = false
 _G.IceAura = false
 _G.OpPlant = false
-_G.AutoSafePlantPlace = false
-_G.AutoSafePlantPickup = false
 _G.BloodFarm = false
 _G.AutoPickUpGold = false
 _G.CoinpressGold = false
 local toplant = 'None'
+_G.TweenPoints = false
+_G.AccurateBullet = false
 
 -- functions
+
+function AccurateBullet()
+    while _G.AccurateBullet == true do
+        if _G.AccurateBullet == true then
+            wait()
+            local function ClosestPlayerToMouse()
+                local target = nil
+                local dist = math.huge
+                for i,v in pairs(game.Players:GetPlayers()) do
+                    if v ~= game.Players.LocalPlayer then
+                        if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
+                            game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
+                        else
+                            if v.TeamColor == game.Players.LocalPlayer.TeamColor then
+                                v = nil
+                            else
+                                local mouse = game.Players.LocalPlayer:GetMouse()
+                                local screenpoint = game.Workspace.CurrentCamera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
+                                local playertomouse = (Vector2.new(mouse.X,mouse.Y)-Vector2.new(screenpoint.X,screenpoint.Y)).magnitude
+                                if playertomouse < dist then
+                                    dist = playertomouse
+                                    target = v.Character.HumanoidRootPart.Position
+                                    return target
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            
+            local function IsPlayerNear()
+                local dist = 230
+                for _, a in pairs(game.Players:GetPlayers()) do
+                    if a ~= game.Players.LocalPlayer then
+                        if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
+                            game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
+                        else
+                            if a.TeamColor == game.Players.LocalPlayer.TeamColor then
+                                a = nil
+                            else
+                                local realdistance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character.HumanoidRootPart.Position).magnitude
+                                if realdistance < dist then
+                                    return true
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            
+            ClosestPlayerToMouse()
+            if ClosestPlayerToMouse() and IsPlayerNear() then
+                FireAccurateBullet = game:GetService('UserInputService').InputBegan:Connect(function(Key)
+                    if Key.KeyCode == Enum.KeyCode.V then
+                        game:GetService("ReplicatedStorage").Events.VoodooSpell:FireServer(ClosestPlayerToMouse())
+                        FireAccurateBullet:Disconnect()
+                    end
+                end)
+            end
+        end
+    end
+end
+
+
+function TweenPoints()
+    while _G.TweenPoints == true do
+        if _G.TweenPoints == true then
+            wait()
+            local chrpos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+            
+            local __TweenTable1 = {
+            RealDistance1 = (chrpos - __TweenPlace1).magnitude
+            }
+            
+            if __TweenPlace2 then
+                local __TweenTable2 = {
+                RealDistance6 = (chrpos - __TweenPlace2).magnitude
+                }
+            end
+            
+            if __TweenPlace3 then
+                local __TweenTable3 = {
+                RealDistance6 = (chrpos - __TweenPlace3).magnitude
+                }
+            end
+            
+            if __TweenPlace4 then
+                local __TweenTable4 = {
+                RealDistance6 = (chrpos - __TweenPlace4).magnitude
+                }
+            end
+            
+            if __TweenPlace5 then
+                local __TweenTable5 = {
+                RealDistance6 = (chrpos - __TweenPlace5).magnitude
+                }
+            end
+            
+            if __TweenPlace6 then
+                local __TweenTable6 = {
+                RealDistance6 = (chrpos - __TweenPlace6).magnitude
+                }
+            end
+            
+            local function GetInputtedTweens()
+                for i, v in pairs(__TweenTable1, __TweenTable2, __TweenTable3, __TweenTable4, __TweenTable5, __TweenTable6) do
+                    if v ~= nil then 
+                        return math.round(v)
+                    end
+                end
+            end
+            
+            local ResultInTweens = GetInputtedTweens()
+            
+            local tween_s = game:GetService('TweenService')
+            local tweeninfo = TweenInfo.new(ResultInTweens/10,Enum.EasingStyle.Linear)
+            local lp = game.Players.LocalPlayer
+            
+            function autotween(v)
+                if lp.Character and lp.Character:FindFirstChild('HumanoidRootPart') then
+                    local cf = CFrame.new(v)
+                    local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+                    a:Play()
+                    if _G.TweenPoints == false then 
+                        a:Pause()
+                    else
+                        a.Completed:wait()
+                    end
+                end
+            end
+            
+            
+            autotween(__TweenPlace1)
+            if __TweenPlace2 then
+                autotween(__TweenPlace2)
+                if __TweenPlace3 then
+                    autotween(__TweenPlace3)
+                    if __TweenPlace4 then
+                        autotween(__TweenPlace4)
+                        if __TweenPlace5 then
+                            autotween(__TweenPlace5)
+                            if __TweenPlace6 then
+                                autotween(__TweenPlace6)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
 function PickUpPlant()
     local Player = game:GetService("Players").LocalPlayer
@@ -138,7 +295,7 @@ function AutoPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace.Deployables:GetChildren()) do
         if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-            game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
+            game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
         end
     end
 end
@@ -257,6 +414,12 @@ function AutoPickUp(Character)
             if Distance < 40 then
                 table.insert(Objects, v)
             end
+             elseif v:FindFirstChild("Pickup") ~= nil and v.Name == 'Pink Diamond' then
+            local Pos = v.Position
+            local Distance = (myPos - Pos).magnitude
+            if Distance < 40 then
+                table.insert(Objects, v)
+            end
         end
     end
     for i,v in pairs(Objects) do
@@ -358,11 +521,11 @@ end
 function AutoPlantPlace()
     while _G.AutoPlantPlace == true do
     if _G.AutoPlantPlace == true then
-        task.wait(1.5)
+        task.wait(1)
         local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace.Deployables:GetChildren()) do
         if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-            game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
+            game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
         end
     end
 end
@@ -372,38 +535,10 @@ end
 function AutoPlantPickup()
     while _G.AutoPlantPickup == true do
     if _G.AutoPlantPickup == true then 
-        task.wait(1.5)
+        task.wait(1)
         local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace:GetChildren()) do
         if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-            game.ReplicatedStorage.Events.Pickup:FireServer(v)
-        end
-    end
-end
-end
-end
-
-function AutoSafePlantPlace()
-    while _G.AutoSafePlantPlace == true do
-    if _G.AutoSafePlantPlace == true then
-        task.wait(1.5)
-        local Player = game:GetService("Players").LocalPlayer
-    for _, v in pairs(workspace.Deployables:GetChildren()) do
-        if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-            game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
-        end
-    end
-end
-end
-end
-
-function AutoSafePlantPickup()
-    while _G.AutoSafePlantPickup == true do
-    if _G.AutoSafePlantPickup == true then 
-        task.wait(1.5)
-        local Player = game:GetService("Players").LocalPlayer
-    for _, v in pairs(workspace:GetChildren()) do
-        if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 20 then
             game.ReplicatedStorage.Events.Pickup:FireServer(v)
         end
     end
@@ -567,13 +702,13 @@ function CoinPressGold()
         task.wait()
     local myPos = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
 
-for i,v in pairs(workspace.Deployables:GetDescendants()) do
+for i,v in pairs(workspace.Deployables:GetChildren()) do
     if v.Name == 'Coin Press' then
     local Pos = v.Reference.Position
     local Distance = (myPos - Pos).magnitude
             if Distance < 15 then 
-            game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, 'Gold')
-            game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, 'Gold')
+            game:GetService("ReplicatedStorage").Events.InteractStructure:FireServer(v, 'Gold')
+            game:GetService("ReplicatedStorage").Events.InteractStructure:FireServer(v, 'Gold')
     end
     end
     end
@@ -586,17 +721,22 @@ function GetNearestPlayerForHutTrapping()
     local closestplayer
     for _, a in pairs(game.Players:GetChildren()) do
         if a ~= game.Players.LocalPlayer then
-            if a.TeamColor == game.Players.LocalPlayer.TeamColor then a = nil
+            if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
+                game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
             else
-                local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character:FindFirstChild('HumanoidRootPart', true).Position).Magnitude
-                if distance < range then
-                    range = distance
-                    closestplayer = a
-                    for i, v in pairs(closestplayer.Character:GetDescendants()) do
-                        if v.Name == 'HumanoidRootPart' then
-                            if closestplayer then
-                                v = v.Position
-                                return v, closestplayer
+                if a.TeamColor == game.Players.LocalPlayer.TeamColor then
+                    a = nil
+                else
+                    local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character:FindFirstChild('HumanoidRootPart', true).Position).Magnitude
+                    if distance < range then
+                        range = distance
+                        closestplayer = a
+                        for i, v in pairs(closestplayer.Character:GetDescendants()) do
+                            if v.Name == 'HumanoidRootPart' then
+                                if closestplayer then
+                                    v = v.Position
+                                    return v, closestplayer
+                                end
                             end
                         end
                     end
@@ -659,7 +799,7 @@ Misc:AddBind({
     Callback = function()
         HutNearestplayer = GetNearestPlayerForHutTrapping()
         if HutNearestplayer then
-            game:GetService("ReplicatedStorage").Events.PlaceStructure:FireServer(HutType1, CFrame.new(HutNearestplayer - Vector3.new(8, 3, 0)), 0)
+            game:GetService("ReplicatedStorage").Events.PlaceStructure:FireServer(HutType1, CFrame.new(HutNearestplayer - Vector3.new(-7, 1, 0)), 0)
         end
     end
 })
@@ -737,22 +877,6 @@ Buttons:AddButton({
             return  
         end
         return oldNIndex(self,i,v)
-        end
-    end
-})
-
-Buttons:AddButton({
-    Name = 'Accurate Bullet(TESTING; calamity dont be a fucking idiot)',
-    Callback = function()
-        local range = 50
-        for i, v in pairs(game.Players:GetChildren()) do
-            if v ~= game.Players.LocalPlayer then
-                for i2, v2 in pairs(v.Character:GetDescendants()) do
-                    if v2.Name == 'HumanoidRootPart' and (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v2.Position).magnitude < range then
-                        game:GetService("ReplicatedStorage").Events.VoodooSpell:FireServer(v2.Position)
-                    end
-                end
-            end
         end
     end
 })
@@ -1031,24 +1155,6 @@ Farming:AddToggle({
 	end    
 })
 
-Farming:AddToggle({
-	Name = "Auto Plant Crop(GoldFarm)",
-	Default = false,
-	Callback = function(Value)
-		_G.AutoSafePlantPlace = Value
-        AutoSafePlantPlace()
-	end    
-})
-
-Farming:AddToggle({
-	Name = "Auto Pickup Crop(GoldFarm)",
-	Default = false,
-	Callback = function(Value)
-		_G.AutoSafePlantPickup = Value
-        AutoSafePlantPickup()
-	end    
-})
-
 Visuals:AddButton({
 	Name = "Night Mode",
 	Callback = function()
@@ -1060,7 +1166,7 @@ Visuals:AddSlider({
 	Name = "Field Of View",
 	Min = 10,
 	Max = 120,
-	Default = 70,
+	Default = game.Workspace.Camera.FieldOfView,
 	Color = Color3.fromRGB(60, 234, 176),
 	Increment = 1,
 	ValueName = "FOV",
@@ -1121,18 +1227,21 @@ Visuals:AddSlider({
 	end    
 })
 
-Credits:AddParagraph("Credits","zvppe#3013 and Indus#0001")
-Credits:AddParagraph("Credits","zvppe#3013 and Indus#0001")
-Credits:AddParagraph("Credits","zvppe#3013 and Indus#0001")
-Credits:AddParagraph("Credits","zvppe#3013 and Indus#0001")
-Credits:AddParagraph("Credits","zvppe#3013 and Indus#0001")
-
 Toggles:AddToggle({
     Name = "Auto Shield",
     Default = false,
     Callback = function(Value)
         _G.AutoShield = Value
         AutoShield()
+    end
+})
+
+Toggles:AddToggle({
+    Name = "Accurate Bullet(fires all 3 at once)",
+    Default = false,
+    Callback = function(Value)
+        _G.AccurateBullet = Value
+        AccurateBullet()
     end
 })
 
@@ -1319,7 +1428,7 @@ GoldFarming:AddButton({
    local function AutoPickup2(Character)
     local myPos = Character.HumanoidRootPart.Position
     local Objects = {}
-    for i,v in pairs(workspace.Items:GetChildren()) do
+    for i,v in pairs(workspace:GetChildren()) do
         if v:FindFirstChild("Pickup") ~= nil and v.ClassName == "UnionOperation" and v.Color == Color3.fromRGB(218, 165, 50) then
             local Pos = v.Position
             local Distance = (myPos - Pos).magnitude
@@ -1371,7 +1480,7 @@ GoldFarming:AddButton({
     local function AutoPickup4(Character)
     local myPos = Character.HumanoidRootPart.Position
     local Objects = {}
-    for i,v in pairs(workspace.Items:GetChildren()) do
+    for i,v in pairs(workspace:GetChildren()) do
         if v:FindFirstChild("Pickup") ~= nil and v.ClassName == "Part" and v.Color == Color3.fromRGB(218, 165, 50) then
             local Pos = v.Position
             local Distance = (myPos - Pos).magnitude
@@ -1482,5 +1591,75 @@ GoldFarming:AddButton({
     Pickupcoins(game.Players.LocalPlayer.Character)
     end
 })
+
+TweenPlace:AddButton({
+    Name = 'Clear all tween points',
+    Default = false,
+    Callback = function()
+        __TweenPlace1 = nil
+        __TweenPlace2 = nil
+        __TweenPlace3 = nil
+        __TweenPlace4 = nil
+        __TweenPlace5 = nil
+        __TweenPlace6 = nil
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 1',
+    Callback = function()
+        __TweenPlace1 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 2',
+    Callback = function()
+        __TweenPlace2 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 3',
+    Callback = function()
+        __TweenPlace3 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 4',
+    Callback = function()
+        __TweenPlace4 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 5',
+    Callback = function()
+        __TweenPlace5 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddButton({
+    Name = 'Set Tween Point Location 6',
+    Callback = function()
+        __TweenPlace6 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+})
+
+TweenPlace:AddToggle({
+    Name = 'Start Tweening',
+    Default = false,
+    Callback = function(Value)
+        _G.TweenPoints = Value
+        TweenPoints()
+    end
+})
+
+Credits:AddParagraph("Credits","zvppe#3013 and YDS#0001")
+Credits:AddParagraph("Credits","zvppe#3013 and YDS#0001")
+Credits:AddParagraph("Credits","zvppe#3013 and YDS#0001")
+Credits:AddParagraph("Credits","zvppe#3013 and YDS#0001")
+Credits:AddParagraph("Credits","zvppe#3013 and YDS#0001")
 
 OrionLib:Init()
