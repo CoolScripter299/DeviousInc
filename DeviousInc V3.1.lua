@@ -782,6 +782,13 @@ Teleports:AddButton({
     end
 })
 
+Teleports:AddButton({
+    Name = "Overworld Tp",
+    Callback = function()
+    game:GetService("TeleportService"):Teleport(11729688377)
+    end
+})
+
 Buttons:AddButton({
     Name = 'Hide Tribe Totem',
     Callback = function()
@@ -840,6 +847,22 @@ Buttons:AddButton({
         end
         return oldNIndex(self,i,v)
         end
+    end
+})
+
+Buttons:AddButton({
+    Name = 'Go to Secret Area(Void)',
+    Callback = function()
+        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, game:GetService("Workspace").BackPortal, 0)
+        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, game:GetService("Workspace").BackPortal, 1)
+    end
+})
+
+Buttons:AddButton({
+    Name = 'Get out Secret Area(Void)',
+    Callback = function()
+        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, game:GetService("Workspace").TeleportParts:GetChildren()[4], 0)
+        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,game:GetService("Workspace").TeleportParts:GetChildren()[4], 1)
     end
 })
 
