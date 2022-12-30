@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V3.1", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V3.2", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -409,17 +409,15 @@ end
 end
 
 function oldgodspawn()
-        while _G.OldGodNotif == true do
-            task.wait()
+    while _G.OldGodNotif == true do
+        task.wait()
         if _G.OldGodNotif == true then 
-          
-          workspace.ChildAdded:Connect(function(v)
-              if v.Name == 'Old God' then
-                 notif.Visible = true
-              end     
-          end)      
-          
-       end
+            workspace.ChildAdded:Connect(function(v)
+                if v.Name == 'Old God' then
+                    notif.Visible = true
+                end
+            end)
+        end
     end
 end
 
@@ -472,11 +470,16 @@ end
 
 function SafeLog()
     while _G.SafeLog == true do 
-    if _G.SafeLog == true then
-        task.wait()
-        
-end
-end
+        if _G.SafeLog == true then
+            task.wait()
+            if game.Players.LocalPlayer.Character.Head:FindFirstChild('LogNotice') == nil then
+                wait()
+                if game.Players.LocalPlayer.Character.Head:FindFirstChild('LogNotice') == nil then
+                    game.Players.LocalPlayer:Kick('Safely Combat Logged!')
+                end
+            end
+        end
+    end
 end
 
 function AutoPlantPlace()
@@ -1140,11 +1143,17 @@ Farming:AddToggle({
 	end    
 })
 
-Visuals:AddButton({
-	Name = "Night Mode",
-	Callback = function()
-        game.Lighting.TimeOfDay = 3
-  	end    
+Visuals:AddSlider({
+	Name = "Time Of Day",
+	Min = 0.1,
+	Max = 24,
+	Default = game.Lighting.ClockTime,
+	Color = Color3.fromRGB(60, 234, 176),
+	Increment = 0.1,
+	ValueName = "Hours",
+	Callback = function(Value)
+		game.Lighting.ClockTime  = Value
+	end    
 })
 
 Visuals:AddSlider({
@@ -1163,13 +1172,13 @@ Visuals:AddSlider({
 Visuals:AddSlider({
 	Name = "Brightness",
 	Min = 0.1,
-	Max = 3,
-	Default = 0.1,
+	Max = 10,
+	Default = game.Lighting.Brightness,
 	Color = Color3.fromRGB(60, 234, 176),
-	Increment = 1,
+	Increment = 0.1,
 	ValueName = "Brightness",
 	Callback = function(Value)
-		game.Lighting.Brightness  = Value
+		game.Lighting.Brightness = Value
 	end    
 })
 
@@ -1203,13 +1212,36 @@ Visuals:AddSlider({
 	Name = "FogEnd",
 	Min = 100,
 	Max = 4500,
-	Default = 2000,
+	Default = game:GetService("Lighting").FogEnd,
 	Color = Color3.fromRGB(60, 234, 176),
 	Increment = 100,
 	ValueName = "FogEnd",
 	Callback = function(Value)
 		game.Lighting.FogEnd  = Value
 	end    
+})
+
+Visuals:AddColorpicker({
+    Name = 'Water Color',
+    Default = Color3.fromRGB(game.Workspace.Terrain.WaterColor.R*255, game.Workspace.Terrain.WaterColor.G*255, game.Workspace.Terrain.WaterColor.B*255),
+    Callback = function(Value)
+        game.Workspace.Terrain.WaterColor = (Value)
+    end
+})
+
+Visuals:AddButton({
+    Name = 'Remove Rain',
+    Callback = function()
+        __GetRainInstance = game:GetService("Workspace").RainPart.ParticleEmitter
+        __GetRainInstance.Enabled = false
+    end
+})
+
+Visuals:AddButton({
+    Name = 'Add Rain Back',
+    Callback = function()
+        __GetRainInstance.Enabled = true
+    end
 })
 
 Toggles:AddToggle({
@@ -1309,14 +1341,14 @@ Toggles:AddToggle({
 })
 
 Toggles:AddToggle({
-	Name = "Safe Combat Log",
+	Name = "Safe Combat Log(only enable to leave)",
 	Default = false,
 	Callback = function(Value)
 		_G.SafeLog = Value
         SafeLog()
 	end    
 })
-	
+
 Toggles:AddToggle({
 	Name = "BloodFarm",
 	Default = false,
