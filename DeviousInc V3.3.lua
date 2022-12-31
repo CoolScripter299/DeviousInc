@@ -77,6 +77,7 @@ _G.OldGodNotif = false
 _G.AutoBlood = false
 _G.AutoBloodVoid = false
 _G.AutoEatNaked = false
+_G.Essence = false
 _G.AutoMine = false
 _G.AutoPlace = false
 _G.OpPlant = false
@@ -89,6 +90,22 @@ _G.CoinpressGold = false
 _G.TweenPoints = false
 local amine = false
 local toplant = 'None'
+
+--Old God Notifier Gui
+local plr = game.Players.LocalPlayer
+local mg = plr.PlayerGui.MainGui
+local upd = mg.Panels.UpdateNotifier:Clone()
+upd.Name = "OldGodNotifier"
+upd.Parent = plr.PlayerGui.MainGui.Panels
+local notif = plr.PlayerGui.MainGui.Panels:FindFirstChild('OldGodNotifier')
+notif.Backdrop.ConfirmButton.TextLabel.Text = "YESSIR UWU!"
+notif.Backdrop.ItemNameLabel.Text = "OLD GOD HAS SPAWNED!"
+notif.Backdrop.ItemNameLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+notif.Backdrop.ItemDescription.Text = "Get to stepping."
+notif.Backdrop.ImageLabel.Image = "http://www.roblox.com/Game/Tools/ThumbnailAsset.ashx?fmt=png&wd=420&ht=420&aid=15967519"notif.Backdrop.ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
+notif.Backdrop.ConfirmButton.MouseButton1Click:Connect(function()
+    notif.Visible = false
+end)
 
 -- functions
 
@@ -186,21 +203,6 @@ function oldgodspawn()
     while _G.OldGodNotif == true do
         task.wait()
         if _G.OldGodNotif == true then
-            local plr = game.Players.LocalPlayer
-            local mg = plr.PlayerGui.MainGui
-            local upd = mg.Panels.UpdateNotifier:Clone()
-            upd.Name = "OldGodNotifier"
-            upd.Parent = plr.PlayerGui.MainGui.Panels
-            local notif = plr.PlayerGui.MainGui.Panels:FindFirstChild('OldGodNotifier')
-            notif.Backdrop.ConfirmButton.TextLabel.Text = "YESSIR UWU!"
-            notif.Backdrop.ItemNameLabel.Text = "OLD GOD HAS SPAWNED!"
-            notif.Backdrop.ItemNameLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-            notif.Backdrop.ItemDescription.Text = "Get to stepping."
-            notif.Backdrop.ImageLabel.Image = "http://www.roblox.com/Game/Tools/ThumbnailAsset.ashx?fmt=png&wd=420&ht=420&aid=15967519"
-            notif.Backdrop.ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
-            notif.Backdrop.ConfirmButton.MouseButton1Click:Connect(function()
-                notif.Visible = false
-            end)
             workspace.ChildAdded:Connect(function(v)
                 if v.Name == 'Old God' then
                     notif.Visible = true
@@ -388,7 +390,7 @@ function GoldFarm()
         if _G.GoldFarm == true then
             task.wait()
             local tween_s = game:GetService('TweenService')
-            local tweeninfo = TweenInfo.new(0.35,Enum.EasingStyle.Linear)
+            local tweeninfo = TweenInfo.new(0.37,Enum.EasingStyle.Quad)
             local lp = game.Players.LocalPlayer
             
             function autofarm(v)
@@ -423,7 +425,7 @@ end
 function IceAura()
     while _G.IceAura == true do 
         if _G.IceAura == true then
-            task.wait(0.185)
+            task.wait(0.1)
             for i, v in pairs(Workspace:GetChildren()) do
                 if string.find(v.Name, 'Ice Chunk') then
                     if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Ice.Position).Magnitude <= 25 then
@@ -470,7 +472,6 @@ function CoinPressGold()
                     local Pos = v.Reference.Position
                     local Distance = (myPos - Pos).magnitude
                     if Distance < 15 then 
-                        game:GetService("ReplicatedStorage").Events.InteractStructure:FireServer(v, 'Gold')
                         game:GetService("ReplicatedStorage").Events.InteractStructure:FireServer(v, 'Gold')
                     end
                 end
@@ -631,9 +632,18 @@ function AutoPickUp(Character)
         end
     end
     for i,v in pairs(Objects) do
-        for i=1,10 do
-            v.Position = myPos
-            game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
+        if _G.Essence == false then
+            for i=1,10 do
+                v.Position = myPos
+                game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
+            end
+        elseif _G.Essence == true then
+            if v.Color == Color3.fromRGB(239, 184, 56) then
+                for i=1,10 do
+                    v.Position = myPos
+                    game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
+                end
+            end
         end
     end
 end
@@ -752,6 +762,14 @@ Binds:AddBind({
     Hold = false,
     Callback = function()
         AutoPickUp(game.Players.LocalPlayer.Character)
+    end
+})
+
+Binds:AddToggle({
+    Name = 'Pickup Just Essence',
+    Default = false,
+    Callback = function(Value)
+        _G.Essence = Value
     end
 })
 
@@ -890,24 +908,6 @@ Buttons:AddButton({
             end
             return oldNIndex(self,i,v)
         end
-    end
-})
-
-Buttons:AddButton({
-    Name = 'Remove Ants[White Ant Mound]',
-    Callback = function()
-       for i, v in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
-            v:Destroy()
-        end 
-    end
-})
-
-Buttons:AddButton({
-    Name = 'Remove Ants[Fire Ant Mound]',
-    Callback = function()
-       for i, v in pairs(game:GetService("Workspace")["Fire Ant Mound"].Ants:GetChildren()) do
-            v:Destroy()
-        end 
     end
 })
 
