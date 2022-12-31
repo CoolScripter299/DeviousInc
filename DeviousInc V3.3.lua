@@ -91,22 +91,6 @@ _G.TweenPoints = false
 local amine = false
 local toplant = 'None'
 
---Old God Notifier Gui
-local plr = game.Players.LocalPlayer
-local mg = plr.PlayerGui.MainGui
-local upd = mg.Panels.UpdateNotifier:Clone()
-upd.Name = "OldGodNotifier"
-upd.Parent = plr.PlayerGui.MainGui.Panels
-local notif = plr.PlayerGui.MainGui.Panels:FindFirstChild('OldGodNotifier')
-notif.Backdrop.ConfirmButton.TextLabel.Text = "YESSIR UWU!"
-notif.Backdrop.ItemNameLabel.Text = "OLD GOD HAS SPAWNED!"
-notif.Backdrop.ItemNameLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-notif.Backdrop.ItemDescription.Text = "Get to stepping."
-notif.Backdrop.ImageLabel.Image = "http://www.roblox.com/Game/Tools/ThumbnailAsset.ashx?fmt=png&wd=420&ht=420&aid=15967519"notif.Backdrop.ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
-notif.Backdrop.ConfirmButton.MouseButton1Click:Connect(function()
-    notif.Visible = false
-end)
-
 -- functions
 
 function AutoShield()
@@ -203,6 +187,21 @@ function oldgodspawn()
     while _G.OldGodNotif == true do
         task.wait()
         if _G.OldGodNotif == true then
+            local plr = game.Players.LocalPlayer
+            local mg = plr.PlayerGui.MainGui
+            local upd = mg.Panels.UpdateNotifier:Clone()
+            upd.Name = "OldGodNotifier"
+            upd.Parent = plr.PlayerGui.MainGui.Panels
+            local notif = plr.PlayerGui.MainGui.Panels:FindFirstChild('OldGodNotifier')
+            notif.Backdrop.ConfirmButton.TextLabel.Text = "YESSIR UWU!"
+            notif.Backdrop.ItemNameLabel.Text = "OLD GOD HAS SPAWNED!"
+            notif.Backdrop.ItemNameLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+            notif.Backdrop.ItemDescription.Text = "Get to stepping."
+            notif.Backdrop.ImageLabel.Image = "http://www.roblox.com/Game/Tools/ThumbnailAsset.ashx?fmt=png&wd=420&ht=420&aid=15967519"
+            notif.Backdrop.ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
+            notif.Backdrop.ConfirmButton.MouseButton1Click:Connect(function()
+                notif.Visible = false
+            end)
             workspace.ChildAdded:Connect(function(v)
                 if v.Name == 'Old God' then
                     notif.Visible = true
@@ -352,7 +351,7 @@ function AutoPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace.Deployables:GetChildren()) do
         if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-            game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
+            game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
         end
     end
 end
@@ -364,7 +363,7 @@ function AutoPlantPlace()
             local Player = game:GetService("Players").LocalPlayer
             for _, v in pairs(workspace.Deployables:GetChildren()) do
                 if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-                game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
+                game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
             end
         end
     end
@@ -472,7 +471,7 @@ function CoinPressGold()
                     local Pos = v.Reference.Position
                     local Distance = (myPos - Pos).magnitude
                     if Distance < 15 then 
-                        game:GetService("ReplicatedStorage").Events.InteractStructure:FireServer(v, 'Gold')
+                        game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, 'Gold')
                     end
                 end
             end
