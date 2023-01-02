@@ -282,7 +282,7 @@ function AutoBlood(Character)
     while _G.AutoBlood == true do
         task.wait(0.1)
         if _G.AutoBlood == true and Character:FindFirstChild('God Chestplate') then 
-            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 90 then
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 85 then
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
@@ -299,7 +299,7 @@ function AutoBloodVoid(Character)
         if _G.AutoBloodVoid == true and Character:FindFirstChild('Void Chestplate')
         or Character:FindFirstChild('Pink Diamond Chestplate')
         or Character:FindFirstChild('Emerald Chestplate') then
-            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 90 then
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 85 then
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
@@ -315,7 +315,7 @@ function AutoEatNaked(Character)
     while _G.AutoEatNaked == true do
         task.wait(0.05)
         if _G.AutoEatNaked == true and Character:FindFirstChild('Void Bag') then 
-            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 90 then
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 85 then
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
@@ -597,7 +597,7 @@ function TweenPoints()
             local __TweenTable = {}
             
             
-            for i, v in pairs(Check_Table) do
+            for i, v in ipairs(Check_Table) do
                 if v ~= nil then
                     table.insert(__TweenTable, math.abs((chrpos - v).magnitude))
                 end
@@ -606,7 +606,11 @@ function TweenPoints()
             local function GetInputtedTweens()
                 for i2, v2 in ipairs(__TweenTable) do
                     if v2 ~= nil then 
-                        return math.round(v2)
+                        for _, a in ipairs(Check_Table) do
+                            if table.find(__TweenTable, _) then
+                                return math.round(v2)
+                            end
+                        end
                     end
                 end
             end
@@ -804,9 +808,11 @@ Toggles:AddToggle({
     Callback = function(Value)
         _G.OldAFarm = Value
         OldAFarm()
-        for i, v in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
-            if v.Hum then
-                v.Hum.WalkSpeed = 8
+        if game.PlaceId == 11729688377 then
+            for i, v in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
+                if v.Hum then
+                    v.Hum.WalkSpeed = 8
+                end
             end
         end
     end
