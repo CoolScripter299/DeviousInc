@@ -604,9 +604,9 @@ function TweenPoints()
             end
             
             local function GetInputtedTweens()
-                for i, v in ipairs(__TweenTable) do
-                    if v ~= nil then 
-                        return math.round(v)
+                for i2, v2 in ipairs(__TweenTable) do
+                    if v2 ~= nil then 
+                        return math.round(v2)
                     end
                 end
             end
@@ -617,15 +617,15 @@ function TweenPoints()
             local tweeninfo = TweenInfo.new(ResultInTweens/10,Enum.EasingStyle.Linear)
             local lp = game.Players.LocalPlayer
             
-            function autotween(v)
+            function autotween(pos)
                 if lp.Character and lp.Character:FindFirstChild('HumanoidRootPart') then
-                    local cf = CFrame.new(v)
+                    local cf = CFrame.new(pos)
                     local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
                     a:Play()
                     if _G.TweenPoints == false then 
                         a:Cancel()
                     else
-                        a.Completed:wait()
+                        a.Completed:wait(ResultInTweens/10)
                     end
                 end
             end
