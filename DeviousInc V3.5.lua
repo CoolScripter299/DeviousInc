@@ -563,15 +563,15 @@ function TweenPoints()
         if _G.TweenPoints == true then
             wait()
             local function CheckNotif()
-            if _G.TweenPoints == false then
-                OrionLib:MakeNotification({
-                Name = "Tweening Stopped",
-                Content = "Hmm, yes, i presume your not afk anymore?",
-                Image = "rbxassetid://4483345998",
-                Time = 3
-                })
+                if _G.TweenPoints == false then
+                    OrionLib:MakeNotification({
+                    Name = "Tweening Stopped",
+                    Content = "Hmm, yes, i presume your not afk anymore?",
+                    Image = "rbxassetid://4483345998",
+                    Time = 3
+                    })
+                end
             end
-        end
             if __TweenPlace1 == nil then
                 OrionLib:MakeNotification({
                 Name = "No Locations Set Bucko!",
