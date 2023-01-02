@@ -562,6 +562,24 @@ function TweenPoints()
     while _G.TweenPoints == true do
         if _G.TweenPoints == true then
             wait()
+            local function CheckNotif()
+            if _G.TweenPoints == false then
+                OrionLib:MakeNotification({
+                Name = "Tweening Stopped",
+                Content = "Hmm, yes, i presume your not afk anymore?",
+                Image = "rbxassetid://4483345998",
+                Time = 3
+                })
+            end
+        end
+            if __TweenPlace1 == nil then
+                OrionLib:MakeNotification({
+                Name = "No Locations Set Bucko!",
+                Content = "Set locations before you start tweening.",
+                Image = "rbxassetid://4483345998",
+                Time = 6
+                })
+            end
             local chrpos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
             local Check_Table = {
                 __TweenPlace1,
@@ -616,6 +634,7 @@ function TweenPoints()
                     autotween(a)
                 end
             end
+            CheckNotif()
         end
     end
 end
@@ -1486,7 +1505,7 @@ TweenPlace:AddButton({
         Name = "You have reset all tween locations!",
         Content = "All points have been reset",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1499,7 +1518,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 1 has been set, this is your first Location",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1512,7 +1531,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 2 has been set",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1525,7 +1544,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 3 has been set",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1538,7 +1557,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 4 has been set",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1551,7 +1570,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 5 has been set",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1564,7 +1583,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 6 has been set",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1577,7 +1596,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 7 has been set",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1590,7 +1609,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 8 has been set",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1603,7 +1622,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 9 has been set",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1616,7 +1635,7 @@ TweenPlace:AddButton({
         Name = "Location Placed!",
         Content = "Tween Point 10 has been set, this is your last Location",
         Image = "rbxassetid://4483345998",
-        Time = 5
+        Time = 3
         })
     end
 })
@@ -1626,6 +1645,14 @@ TweenPlace:AddToggle({
     Default = false,
     Callback = function(Value)
         _G.TweenPoints = Value
+        if _G.TweenPoints == true then
+            OrionLib:MakeNotification({
+            Name = "Tweening Started",
+            Content = "Watchu grindin there young buck??",
+            Image = "rbxassetid://4483345998",
+            Time = 3
+            })
+        end
         TweenPoints()
     end
 })
@@ -1768,3 +1795,10 @@ Credits:AddParagraph("Credits","zvppe#3013 and YDS#0001")
 Credits:AddParagraph("Credits","zvppe#3013 and YDS#0001")
 
 OrionLib:Init()
+--Welcome User
+OrionLib:MakeNotification({
+    Name = "Welcome!",
+    Content = "Hello " .. game.Players.LocalPlayer.Name .. "!, Welcome to Devious Inc V3.5.",
+    Image = "rbxassetid://4483345998",
+    Time = 10
+})
