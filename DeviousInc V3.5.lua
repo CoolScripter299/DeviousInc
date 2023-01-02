@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V3.3", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V3.5", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -67,12 +67,29 @@ local Credits = Window:MakeTab({
 	PremiumOnly = false
 })
 
+--Old God Gui
+local plr = game.Players.LocalPlayer
+local mg = plr.PlayerGui.MainGui
+local upd = mg.Panels.UpdateNotifier:Clone()
+upd.Name = "OldGodNotifier"
+upd.Parent = plr.PlayerGui.MainGui.Panels
+local notif = plr.PlayerGui.MainGui.Panels:FindFirstChild('OldGodNotifier')
+notif.Backdrop.ConfirmButton.TextLabel.Text = "YESSIR UWU!"
+notif.Backdrop.ItemNameLabel.Text = "OLD GOD HAS SPAWNED!"
+notif.Backdrop.ItemNameLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+notif.Backdrop.ItemDescription.Text = "Get to stepping."
+notif.Backdrop.ImageLabel.Image = "http://www.roblox.com/Game/Tools/ThumbnailAsset.ashx?fmt=png&wd=420&ht=420&aid=15967519"notif.Backdrop.ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
+notif.Backdrop.ConfirmButton.MouseButton1Click:Connect(function()
+    notif.Visible = false
+end)
+
 --Gloabls and important locals
 
 _G.AutoShield = false
 _G.AccurateBullet = false
 _G.SafeLog = false
 _G.NoStarve = false
+_G.OldAFarm = false
 _G.OldGodNotif = false
 _G.AutoBlood = false
 _G.AutoBloodVoid = false
@@ -183,25 +200,75 @@ function NoStarve()
     end
 end
 
+function OldAFarm()
+    while _G.OldAFarm == true do
+        if _G.OldAFarm == true then
+            task.wait(0.1)
+            local lp = game.Players.LocalPlayer
+            local function getnearestant()
+                local range = math.huge
+                local nearant = nil
+                for _, a in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
+                    if a and a:FindFirstChildOfClass('Humanoid') then
+                        local dist = (lp.Character.HumanoidRootPart.Position - a.HumanoidRootPart.Position).magnitude
+                        if dist < range then
+                            range = dist
+                            nearant = a.HumanoidRootPart
+                        end
+                    end
+                end
+                return nearant
+            end
+            local function autofarm(v)
+                if lp.Character and lp.Character:FindFirstChild('HumanoidRootPart') then
+                    local tween_s = game:GetService('TweenService')
+                    local tweeninfo = TweenInfo.new(0.2,Enum.EasingStyle.Linear)
+                    local cf = CFrame.new(v)
+                    local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf,})
+                    a:Play()
+                    a.Completed:wait()
+                end
+            end
+            local function getessencefromgod()
+                wait(0.5)
+                _G.Essence = true
+                AutoPickUp(game.Players.LocalPlayer.Character)
+                _G.Essence = false
+            end
+            if workspace:FindFirstChild('Old God') and workspace:FindFirstChild('Old God').Totem then
+                game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(game.ReplicatedStorage.RelativeTime.Value, {workspace:FindFirstChild('Old God').Totem})
+                autofarm(Vector3.new(-1019, -204, -462))
+                for i3, v3 in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
+                    if v3 and v3:FindFirstChildOfClass('Humanoid') then 
+                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v3.PrimaryPart.Position).magnitude < 25 then
+                            v3.Hum.Sit = true
+                            wait(0.2)
+                        end
+                    end
+                end
+            else
+                wait()
+                getessencefromgod()
+                getnearestant()
+                autofarm(Vector3.new(-1071.5244140625, -204.5394744873047, -466.9952087402344))
+                for i, v in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
+                    if v and v:FindFirstChildOfClass('Humanoid') then
+                        v.Hum.Sit = false
+                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).magnitude < 8.5 then
+                            v.Hum.WalkSpeed = 0
+                            game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(game.ReplicatedStorage.RelativeTime.Value, {getnearestant()})
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 function oldgodspawn()
     while _G.OldGodNotif == true do
         task.wait()
         if _G.OldGodNotif == true then
-            local plr = game.Players.LocalPlayer
-            local mg = plr.PlayerGui.MainGui
-            local upd = mg.Panels.UpdateNotifier:Clone()
-            upd.Name = "OldGodNotifier"
-            upd.Parent = plr.PlayerGui.MainGui.Panels
-            local notif = plr.PlayerGui.MainGui.Panels:FindFirstChild('OldGodNotifier')
-            notif.Backdrop.ConfirmButton.TextLabel.Text = "YESSIR UWU!"
-            notif.Backdrop.ItemNameLabel.Text = "OLD GOD HAS SPAWNED!"
-            notif.Backdrop.ItemNameLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-            notif.Backdrop.ItemDescription.Text = "Get to stepping."
-            notif.Backdrop.ImageLabel.Image = "http://www.roblox.com/Game/Tools/ThumbnailAsset.ashx?fmt=png&wd=420&ht=420&aid=15967519"
-            notif.Backdrop.ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
-            notif.Backdrop.ConfirmButton.MouseButton1Click:Connect(function()
-                notif.Visible = false
-            end)
             workspace.ChildAdded:Connect(function(v)
                 if v.Name == 'Old God' then
                     notif.Visible = true
@@ -341,7 +408,7 @@ end
 function PickUpPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace:GetChildren()) do
-        if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 30 then
+        if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
             game.ReplicatedStorage.Events.Pickup:FireServer(v)
         end
     end
@@ -350,8 +417,12 @@ end
 function AutoPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace.Deployables:GetChildren()) do
-        if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-            game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
+        if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 15 then
+            if game.PlaceId == 11729688377 then 
+                game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
+            elseif game.PlaceId == 11879754496 then
+                game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
+            end
         end
     end
 end
@@ -359,14 +430,18 @@ end
 function AutoPlantPlace()
     while _G.AutoPlantPlace == true do
         if _G.AutoPlantPlace == true then
-            task.wait(1)
+            task.wait(0.5)
             local Player = game:GetService("Players").LocalPlayer
             for _, v in pairs(workspace.Deployables:GetChildren()) do
-                if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-                game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
+                if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 15 then
+                    if game.PlaceId == 11729688377 then
+                        game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
+                    elseif game.PlaceId == 11879754496 then
+                        game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
+                    end
+                end
             end
         end
-    end
     end
 end
 
@@ -427,7 +502,7 @@ function IceAura()
             task.wait(0.1)
             for i, v in pairs(Workspace:GetChildren()) do
                 if string.find(v.Name, 'Ice Chunk') then
-                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Ice.Position).Magnitude <= 25 then
+                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Ice.Position).Magnitude <= 18 then
                         game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(game:GetService("ReplicatedStorage").RelativeTime.Value, {v.Ice})
                     end
                 end
@@ -471,7 +546,11 @@ function CoinPressGold()
                     local Pos = v.Reference.Position
                     local Distance = (myPos - Pos).magnitude
                     if Distance < 15 then 
-                        game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, 'Gold')
+                        if game.PlaceId == 11729688377 then
+                            game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, 'Gold')
+                        elseif game.PlaceId == 11879754496 then
+                            game:GetService("ReplicatedStorage").Events.InteractStructure:FireServer(v, 'Gold')
+                        end
                     end
                 end
             end
@@ -590,14 +669,14 @@ function KeybindGodArmour()
     game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("God Halo")
     game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("God Chestplate")
     game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("God Legs")
-    game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("Candy Bag")
+    game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("Void Bag")
 end
 
 function KeybindVoidArmour()
     game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("Void Shroud")
     game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("Void Chestplate")
     game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("Void Greaves")
-    game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("Candy Bag")
+    game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer("Void Bag")
 end
 
 function AutoPickUp(Character)
@@ -631,14 +710,12 @@ function AutoPickUp(Character)
         end
     end
     for i,v in pairs(Objects) do
-        if _G.Essence == false then
-            for i=1,10 do
+        for i=1,10 do
+            if _G.Essence == false then
                 v.Position = myPos
                 game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
-            end
-        elseif _G.Essence == true then
-            if v.Color == Color3.fromRGB(239, 184, 56) then
-                for i=1,10 do
+            elseif _G.Essence == true then
+                if v.Color == Color3.fromRGB(239, 184, 56) then
                     v.Position = myPos
                     game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
                 end
@@ -700,7 +777,21 @@ Toggles:AddDropdown({
     end
 })
 
-Toggles:AddParagraph("(Bluefruit Recommended) Food Per Hour" , "39/Hour Survivalist, 80/Hour No Survivalist")
+Toggles:AddParagraph("Food Per Hour(Bluefruit Recommended)" , "39/Hour Survivalist, 80/Hour No Survivalist")
+
+Toggles:AddToggle({
+    Name = "Old God Xp AutoFarm(use pick/ be near god)",
+    Default = false,
+    Callback = function(Value)
+        _G.OldAFarm = Value
+        OldAFarm()
+        for i, v in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
+            if v.Hum then
+                v.Hum.WalkSpeed = 8
+            end
+        end
+    end
+})
 
 Toggles:AddToggle({
 	Name = "Old God Spawn Notifier",
@@ -1391,6 +1482,12 @@ TweenPlace:AddButton({
         __TweenPlace8 = nil
         __TweenPlace9 = nil
         __TweenPlace10 = nil
+        OrionLib:MakeNotification({
+        Name = "You have reset all tween locations!",
+        Content = "All points have been reset",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1398,6 +1495,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 1',
     Callback = function()
         __TweenPlace1 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 1 has been set, this is your first Location",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1405,6 +1508,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 2',
     Callback = function()
         __TweenPlace2 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 2 has been set",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1412,6 +1521,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 3',
     Callback = function()
         __TweenPlace3 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 3 has been set",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1419,6 +1534,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 4',
     Callback = function()
         __TweenPlace4 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 4 has been set",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1426,6 +1547,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 5',
     Callback = function()
         __TweenPlace5 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 5 has been set",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1433,6 +1560,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 6',
     Callback = function()
         __TweenPlace6 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 6 has been set",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1440,6 +1573,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 7',
     Callback = function()
         __TweenPlace7 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 7 has been set",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1447,6 +1586,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 8',
     Callback = function()
         __TweenPlace8 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 8 has been set",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1454,6 +1599,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 9',
     Callback = function()
         __TweenPlace9 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 9 has been set",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
@@ -1461,6 +1612,12 @@ TweenPlace:AddButton({
     Name = 'Set Tween Point Location 10',
     Callback = function()
         __TweenPlace10 = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        OrionLib:MakeNotification({
+        Name = "Location Placed!",
+        Content = "Tween Point 10 has been set, this is your last Location",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+        })
     end
 })
 
