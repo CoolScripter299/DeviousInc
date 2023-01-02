@@ -597,9 +597,9 @@ function TweenPoints()
             local __TweenTable = {}
             
             
-            for i, v in ipairs(Check_Table) do
+            for i, v in pairs(Check_Table) do
                 if v ~= nil then
-                    table.insert(__TweenTable, (chrpos - v).magnitude)
+                    table.insert(__TweenTable, math.abs((chrpos - v).magnitude))
                 end
             end
             
@@ -625,7 +625,7 @@ function TweenPoints()
                     if _G.TweenPoints == false then 
                         a:Cancel()
                     else
-                        a.Completed:wait(ResultInTweens/10)
+                        a.Completed:wait()
                     end
                 end
             end
