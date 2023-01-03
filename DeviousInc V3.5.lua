@@ -280,9 +280,10 @@ end
 
 function AutoBlood(Character)
     while _G.AutoBlood == true do
-        task.wait(0.1)
+        task.wait(0.08)
         if _G.AutoBlood == true and Character:FindFirstChild('God Chestplate') then 
-            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 85 then
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 90 then
+                game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
@@ -299,7 +300,10 @@ function AutoBloodVoid(Character)
         if _G.AutoBloodVoid == true and Character:FindFirstChild('Void Chestplate')
         or Character:FindFirstChild('Pink Diamond Chestplate')
         or Character:FindFirstChild('Emerald Chestplate') then
-            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 85 then
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 90 then
+                game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
+                game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
+                game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
@@ -315,7 +319,9 @@ function AutoEatNaked(Character)
     while _G.AutoEatNaked == true do
         task.wait(0.05)
         if _G.AutoEatNaked == true and Character:FindFirstChild('Void Bag') then 
-            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 85 then
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 90 then
+                game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
+                game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
@@ -448,10 +454,10 @@ end
 function AutoPlantPickup()
     while _G.AutoPlantPickup == true do
         if _G.AutoPlantPickup == true then 
-            task.wait(1)
+            task.wait(1.3)
             local Player = game:GetService("Players").LocalPlayer
             for _, v in pairs(workspace:GetChildren()) do
-                if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
+                if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 20 then
                 game.ReplicatedStorage.Events.Pickup:FireServer(v)
             end
         end
@@ -561,7 +567,7 @@ end
 function TweenPoints()
     while _G.TweenPoints == true do
         if _G.TweenPoints == true then
-            wait()
+            task.wait()
             local function CheckNotif()
                 if _G.TweenPoints == false then
                     OrionLib:MakeNotification({
@@ -580,7 +586,6 @@ function TweenPoints()
                 Time = 6
                 })
             end
-            local chrpos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
             local Check_Table = {
                 __TweenPlace1,
                 __TweenPlace2,
@@ -594,34 +599,29 @@ function TweenPoints()
                 __TweenPlace10
             }
             
-            local __TweenTable = {}
+            local __TweenTable__ = {}
             
-            
-            for i, v in ipairs(Check_Table) do
-                if v ~= nil then
-                    table.insert(__TweenTable, math.abs((chrpos - v).magnitude))
-                end
-            end
-            
-            local function GetInputtedTweens()
-                for i2, v2 in ipairs(__TweenTable) do
-                    if v2 ~= nil then 
-                        for _, a in ipairs(Check_Table) do
-                            if table.find(__TweenTable, _) then
-                                return math.round(v2)
-                            end
-                        end
+            function addtweenstotable()
+                for i2, v2 in ipairs(Check_Table) do
+                    if v2 ~= nil then
+                        table.insert(__TweenTable__, math.round((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v2).Magnitude))
                     end
                 end
             end
-            
-            local ResultInTweens = GetInputtedTweens()
-            
-            local tween_s = game:GetService('TweenService')
-            local tweeninfo = TweenInfo.new(ResultInTweens/10,Enum.EasingStyle.Linear)
-            local lp = game.Players.LocalPlayer
-            
+            addtweenstotable()
+            function removefirstindex()
+                for i, v in ipairs(__TweenTable__) do
+                    if v ~= nil then
+                        return v
+                    end
+                end
+            end
             function autotween(pos)
+                local tween_s = game:GetService('TweenService')
+                local lp = game.Players.LocalPlayer
+                local tweeninfo = TweenInfo.new(removefirstindex()/10,Enum.EasingStyle.Linear)
+                table.remove(__TweenTable__, 1)
+                print(table.unpack(__TweenTable__))
                 if lp.Character and lp.Character:FindFirstChild('HumanoidRootPart') then
                     local cf = CFrame.new(pos)
                     local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
@@ -630,11 +630,12 @@ function TweenPoints()
                         a:Cancel()
                     else
                         a.Completed:wait()
+                        addtweenstotable()
                     end
                 end
             end
             for _, a in ipairs(Check_Table) do
-                if a ~= nil then
+                if a then
                     autotween(a)
                 end
             end
@@ -912,7 +913,7 @@ Binds:AddDropdown({
 
 Binds:AddBind({
 	Name = "Auto Mine",
-	Default = Enum.KeyCode.L,
+	Default = Enum.KeyCode.Home,
 	Hold = false,
 	Callback = function()
 	    if amine == false then
@@ -1804,7 +1805,7 @@ OrionLib:Init()
 --Welcome User
 OrionLib:MakeNotification({
     Name = "Welcome!",
-    Content = "Hello " .. game.Players.LocalPlayer.Name .. "!, Welcome to Devious Inc V3.5.",
+    Content = "Hello " .. game.Players.LocalPlayer.Name .. "! Welcome to Devious Inc V3.5.",
     Image = "rbxassetid://4483345998",
     Time = 10
 })
