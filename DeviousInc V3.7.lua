@@ -1790,7 +1790,7 @@ OrionLib:Init()
 --Welcome User
 OrionLib:MakeNotification({
     Name = "Welcome!",
-    Content = "Hello " .. game.Players.LocalPlayer.Name .. "! Welcome to Devious Inc V3.5.",
+    Content = "Hello " .. game.Players.LocalPlayer.Name .. "! Welcome to Devious Inc V3.7.",
     Image = "rbxassetid://4483345998",
     Time = 10
 })
