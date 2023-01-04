@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Devious Inc V3.5", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "Devious Inc V3.7", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
 
@@ -14,7 +14,7 @@ local Toggles = Window:MakeTab({
 })
 
 local Healing = Window:MakeTab({
-	Name = "AutoHeal",
+	Name = "Auto Heal",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
@@ -91,6 +91,7 @@ _G.SafeLog = false
 _G.NoStarve = false
 _G.OldAFarm = false
 _G.OldGodNotif = false
+_G.BloodFarm = false
 _G.AutoBlood = false
 _G.AutoBloodVoid = false
 _G.AutoEatNaked = false
@@ -224,7 +225,7 @@ function OldAFarm()
                     local tween_s = game:GetService('TweenService')
                     local tweeninfo = TweenInfo.new(0.2,Enum.EasingStyle.Linear)
                     local cf = CFrame.new(v)
-                    local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf,})
+                    local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
                     a:Play()
                     a.Completed:wait()
                 end
@@ -278,12 +279,51 @@ function oldgodspawn()
     end
 end
 
+function BloodFarm()
+    while _G.BloodFarm == true do
+        if _G.BloodFarm == true then
+            task.wait()
+            local table = {
+                Vector3.new(94, -1, -1447),
+                Vector3.new(-191, -1, -1500),
+                Vector3.new(-321, -1, -1676),
+                Vector3.new(140, -1, -1578),
+                Vector3.new(-258, -3, -1587),
+                Vector3.new(93, -2, -1516)
+            }
+            local ts = game:GetService('TweenService')
+            __tweeninfo1 = TweenInfo.new(32,Enum.EasingStyle.Linear)
+            local lp = game.Players.LocalPlayer
+            local function farmblood(v)
+                if lp.Character and lp.Character:FindFirstChild('HumanoidRootPart') then
+                    local cf = CFrame.new(v)
+                    local a = ts:Create(lp.Character.HumanoidRootPart,__tweeninfo1,{CFrame=cf})
+                    a:Play()
+                    if _G.BloodFarm == false then
+                        a:Cancel()
+                    else
+                        a.Completed:wait()
+                    end
+                end
+            end
+            for _1, a1 in ipairs(table) do
+                if _1 == 1 then
+                    __tweeninfo1 = TweenInfo.new(2,Enum.EasingStyle.Linear)
+                    farmblood(a1)
+                else
+                    __tweeninfo1 = TweenInfo.new(32,Enum.EasingStyle.Linear)
+                    farmblood(a1)
+                end
+            end
+        end
+    end
+end
+
 function AutoBlood(Character)
     while _G.AutoBlood == true do
         task.wait(0.08)
         if _G.AutoBlood == true and Character:FindFirstChild('God Chestplate') then 
             if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 90 then
-                game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
@@ -301,7 +341,6 @@ function AutoBloodVoid(Character)
         or Character:FindFirstChild('Pink Diamond Chestplate')
         or Character:FindFirstChild('Emerald Chestplate') then
             if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health < 90 then
-                game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
                 game:GetService("ReplicatedStorage").Events.UseBagltem:FireServer(HealType)
@@ -412,10 +451,13 @@ function OpPlant()
 end
 
 function PickUpPlant()
+    task.wait()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace:GetChildren()) do
-        if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 25 then
-            game.ReplicatedStorage.Events.Pickup:FireServer(v)
+        if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" then
+            if (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 60 then
+                game.ReplicatedStorage.Events.Pickup:FireServer(v)
+            end
         end
     end
 end
@@ -423,10 +465,8 @@ end
 function AutoPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace.Deployables:GetChildren()) do
-        if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 15 then
-            if game.PlaceId == 11729688377 then 
-                game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
-            elseif game.PlaceId == 11879754496 then
+        if v.Name == "Plant Box" then
+            if (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < plantingrange1 then
                 game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
             end
         end
@@ -436,13 +476,11 @@ end
 function AutoPlantPlace()
     while _G.AutoPlantPlace == true do
         if _G.AutoPlantPlace == true then
-            task.wait(0.5)
+            task.wait(autoplantpickupwaittime)
             local Player = game:GetService("Players").LocalPlayer
             for _, v in pairs(workspace.Deployables:GetChildren()) do
-                if v.Name == "Plant Box" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 15 then
-                    if game.PlaceId == 11729688377 then
-                        game.ReplicatedStorage.Events.lnteractStructure:FireServer(v, toplant)
-                    elseif game.PlaceId == 11879754496 then
+                if v.Name == "Plant Box" then
+                    if (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < plantingrange1 then
                         game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
                     end
                 end
@@ -454,14 +492,16 @@ end
 function AutoPlantPickup()
     while _G.AutoPlantPickup == true do
         if _G.AutoPlantPickup == true then 
-            task.wait(1.3)
+            task.wait(autoplantpickupwaittime)
             local Player = game:GetService("Players").LocalPlayer
             for _, v in pairs(workspace:GetChildren()) do
-                if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 20 then
-                game.ReplicatedStorage.Events.Pickup:FireServer(v)
+                if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" then
+                    if (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 60 then
+                        game.ReplicatedStorage.Events.Pickup:FireServer(v)
+                    end
+                end
             end
         end
-    end
     end
 end
 
@@ -599,43 +639,30 @@ function TweenPoints()
                 __TweenPlace10
             }
             
-            local __TweenTable__ = {}
+            function gettweeninfo()
+                local realdistance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getcurrenttween).magnitude
+                _tweeninfo_ = TweenInfo.new(realdistance/16,Enum.EasingStyle.Linear)
+                return _tweeninfo_
+            end
             
-            function addtweenstotable()
-                for i2, v2 in ipairs(Check_Table) do
-                    if v2 ~= nil then
-                        table.insert(__TweenTable__, math.round((game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v2).Magnitude))
-                    end
-                end
-            end
-            addtweenstotable()
-            function removefirstindex()
-                for i, v in ipairs(__TweenTable__) do
-                    if v ~= nil then
-                        return v
-                    end
-                end
-            end
+            
             function autotween(pos)
                 local tween_s = game:GetService('TweenService')
                 local lp = game.Players.LocalPlayer
-                local tweeninfo = TweenInfo.new(removefirstindex()/10,Enum.EasingStyle.Linear)
-                table.remove(__TweenTable__, 1)
-                print(table.unpack(__TweenTable__))
                 if lp.Character and lp.Character:FindFirstChild('HumanoidRootPart') then
                     local cf = CFrame.new(pos)
-                    local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+                    local a = tween_s:Create(lp.Character.HumanoidRootPart,gettweeninfo(),{CFrame=cf})
                     a:Play()
                     if _G.TweenPoints == false then 
                         a:Cancel()
                     else
                         a.Completed:wait()
-                        addtweenstotable()
                     end
                 end
             end
             for _, a in ipairs(Check_Table) do
                 if a then
+                    getcurrenttween = a
                     autotween(a)
                 end
             end
@@ -662,24 +689,20 @@ end
 function GetNearestPlayerForHutTrapping()
     local range = 55
     local closestplayer
-    for _, a in pairs(game.Players:GetChildren()) do
-        if a ~= game.Players.LocalPlayer then
-            if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
-                game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
-            else
-                if a.TeamColor == game.Players.LocalPlayer.TeamColor then
-                    a = nil
-                else
-                    local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character:FindFirstChild('HumanoidRootPart', true).Position).Magnitude
-                    if distance < range then
-                        range = distance
-                        closestplayer = a
-                        for i, v in pairs(closestplayer.Character:GetDescendants()) do
-                            if v.Name == 'HumanoidRootPart' then
-                                if closestplayer then
-                                    v = v.Position
-                                    return v, closestplayer
-                                end
+    if game.Players.LocalPlayer.TeamColor == BrickColor.new('CGA brown') then
+        game.Players.LocalPlayer.TeamColor = BrickColor.new('Really black')
+    elseif game.Players.LocalPlayer.TeamColor ~= BrickColor.new('CGA brown') then
+        for _, a in pairs(game.Players:GetChildren()) do
+            if a ~= game.Players.LocalPlayer and a.TeamColor ~= game.Players.LocalPlayer.TeamColor then
+                local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - a.Character:FindFirstChild('HumanoidRootPart', true).Position).Magnitude
+                if distance < range then
+                    range = distance
+                    closestplayer = a
+                    for i, v in pairs(closestplayer.Character:GetDescendants()) do
+                        if v.Name == 'HumanoidRootPart' then
+                            if closestplayer then
+                                v = v.Position
+                                return v, closestplayer
                             end
                         end
                     end
@@ -760,7 +783,7 @@ Toggles:AddToggle({
 })
 
 Toggles:AddToggle({
-    Name = "Accurate Bullet(Default; Q[in binding])",
+    Name = "Accurate Bolt(Default; Q[in binding])",
     Default = false,
     Callback = function(Value)
         _G.AccurateBullet = Value
@@ -810,9 +833,11 @@ Toggles:AddToggle({
         _G.OldAFarm = Value
         OldAFarm()
         if game.PlaceId == 11729688377 then
-            for i, v in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
-                if v.Hum then
-                    v.Hum.WalkSpeed = 8
+            if Workspace:FindFirstChild('White Ant Mound') then
+                for i, v in pairs(game:GetService("Workspace")["White Ant Mound"].Ants:GetChildren()) do
+                    if v.Hum then
+                        v.Hum.WalkSpeed = 8
+                    end
                 end
             end
         end
@@ -825,6 +850,15 @@ Toggles:AddToggle({
 	Callback = function(Value)
 		_G.OldGodNotif = Value
         oldgodspawn()
+	end    
+})
+
+Toggles:AddToggle({
+	Name = "Blood Farm",
+	Default = false,
+	Callback = function(Value)
+		_G.BloodFarm = Value
+        BloodFarm()
 	end    
 })
 
@@ -847,7 +881,7 @@ Healing:AddToggle({
 })
 
 Healing:AddToggle({
-	Name = "AutoHeal Naked[USES VOID BAG]",
+	Name = "Auto Heal Naked[USES VOID BAG]",
 	Default = false,
 	Callback = function(Value)
 		_G.AutoEatNaked = Value
@@ -896,8 +930,9 @@ Binds:AddBind({
     Callback = function()
         HutNearestplayer = GetNearestPlayerForHutTrapping()
         if HutNearestplayer then
-            game:GetService("ReplicatedStorage").Events.PlaceStructure:FireServer(HutType1, CFrame.new(HutNearestplayer - Vector3.new(-7, 1, 0)), 0)
+            game:GetService("ReplicatedStorage").Events.PlaceStructure:FireServer(HutType1, CFrame.new(Vector3.new(HutNearestplayer.X, HutNearestplayer.Y, HutNearestplayer.Z) + Vector3.new(5, -3, 0)), 0)
         end
+        wait(5)
         game.Players.LocalPlayer.TeamColor = BrickColor.new('CGA brown')
     end
 })
@@ -942,32 +977,6 @@ Binds:AddBind({
     Hold = false,
     Callback = function()
         KeybindVoidArmour()
-    end
-})
-
-Buttons:AddButton({
-    Name = "Hide Tribe Totem[Big Ol' Hut]",
-    Callback = function()
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-        local RootPart = LocalPlayer.Character.HumanoidRootPart
-        local cframe = RootPart.CFrame
-        local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
-        
-        Remote:FireServer("Tribe Totem", cframe * CFrame.new(0, -4.5, -25), 0)
-        Remote:FireServer("Big Ol' Hut", cframe * CFrame.new(0, -2.8, -25), 0)
-    end
-})
-
-Buttons:AddButton({
-    Name = 'Hide Tribe Totem[God Hut]',
-    Callback = function()
-        local LocalPlayer = game:GetService("Players").LocalPlayer
-        local RootPart = LocalPlayer.Character.HumanoidRootPart
-        local cframe = RootPart.CFrame
-        local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
-        
-        Remote:FireServer("Tribe Totem", cframe * CFrame.new(0, -4.5, -25), 0)
-        Remote:FireServer("God Hut", cframe * CFrame.new(0, -2.8, -25), 0)
     end
 })
 
@@ -1256,6 +1265,19 @@ local planting = Farming:AddSection({
    Name = "Planting" 
 })
 
+Farming:AddSlider({
+	Name = "Plant Range",
+	Min = 1,
+	Max = 60,
+	Default = 25,
+	Color = Color3.fromRGB(86, 36, 36),
+	Increment = 1,
+	ValueName = "Magnitude",
+	Callback = function(Value)
+		plantingrange1  = Value
+	end    
+})
+
 Farming:AddDropdown({
 	Name = "Crop Type",
 	Default = "Bloodfruit",
@@ -1298,6 +1320,19 @@ Farming:AddToggle({
 	Callback = function(Value)
 		_G.AutoPlantPickup = Value
         AutoPlantPickup()
+	end    
+})
+
+Farming:AddSlider({
+	Name = "Auto Plant/Pickup Crop Wait Time",
+	Min = 0.1,
+	Max = 5,
+	Default = 1,
+	Color = Color3.fromRGB(86, 36, 36),
+	Increment = 0.1,
+	ValueName = "Seconds",
+	Callback = function(Value)
+		autoplantpickupwaittime  = Value
 	end    
 })
 
