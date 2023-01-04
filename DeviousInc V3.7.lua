@@ -91,7 +91,6 @@ _G.SafeLog = false
 _G.NoStarve = false
 _G.OldAFarm = false
 _G.OldGodNotif = false
-_G.BloodFarm = false
 _G.AutoBlood = false
 _G.AutoBloodVoid = false
 _G.AutoEatNaked = false
@@ -275,46 +274,6 @@ function oldgodspawn()
                     notif.Visible = true
                 end
             end)
-        end
-    end
-end
-
-function BloodFarm()
-    while _G.BloodFarm == true do
-        if _G.BloodFarm == true then
-            task.wait()
-            local table = {
-                Vector3.new(94, -1, -1447),
-                Vector3.new(-191, -1, -1500),
-                Vector3.new(-321, -1, -1676),
-                Vector3.new(140, -1, -1578),
-                Vector3.new(-258, -3, -1587),
-                Vector3.new(93, -2, -1516)
-            }
-            local ts = game:GetService('TweenService')
-            __tweeninfo1 = TweenInfo.new(32,Enum.EasingStyle.Linear)
-            local lp = game.Players.LocalPlayer
-            local function farmblood(v)
-                if lp.Character and lp.Character:FindFirstChild('HumanoidRootPart') then
-                    local cf = CFrame.new(v)
-                    local a = ts:Create(lp.Character.HumanoidRootPart,__tweeninfo1,{CFrame=cf})
-                    a:Play()
-                    if _G.BloodFarm == false then
-                        a:Cancel()
-                    else
-                        a.Completed:wait()
-                    end
-                end
-            end
-            for _1, a1 in ipairs(table) do
-                if _1 == 1 then
-                    __tweeninfo1 = TweenInfo.new(2,Enum.EasingStyle.Linear)
-                    farmblood(a1)
-                else
-                    __tweeninfo1 = TweenInfo.new(32,Enum.EasingStyle.Linear)
-                    farmblood(a1)
-                end
-            end
         end
     end
 end
@@ -850,15 +809,6 @@ Toggles:AddToggle({
 	Callback = function(Value)
 		_G.OldGodNotif = Value
         oldgodspawn()
-	end    
-})
-
-Toggles:AddToggle({
-	Name = "Blood Farm",
-	Default = false,
-	Callback = function(Value)
-		_G.BloodFarm = Value
-        BloodFarm()
 	end    
 })
 
