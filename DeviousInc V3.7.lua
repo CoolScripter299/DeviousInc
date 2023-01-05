@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local OrionLib = loadstring(game:HttpGet(('https://gist.githubusercontent.com/alt-er1/048a3633cc4752e578fe8386a554e087/raw/a2ebc46e4912c6eaf1f0d06d0f45cf7db477f025/DevInc.lua')))()
 local Window = OrionLib:MakeWindow({Name = "Devious Inc V3.7", HidePremium = false,IntroText = "Prepare for mass deviousness...",IntroEnabled = true, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 -- Infinite Yield
@@ -413,8 +413,8 @@ function PickUpPlant()
     task.wait()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace:GetChildren()) do
-        if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" then
-            if (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 60 then
+        if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and v:FindFirstChild('PrimaryPart') then
+            if (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < 25 then
                 game.ReplicatedStorage.Events.Pickup:FireServer(v)
             end
         end
@@ -425,7 +425,7 @@ function AutoPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace.Deployables:GetChildren()) do
         if v.Name == "Plant Box" then
-            if v:FindFirstChild(toplant) == nil and(Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < plantingrange1 then
+            if v:FindFirstChild(toplant) == nil and (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < plantingrange1 then
                 game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
             end
         end
@@ -439,7 +439,7 @@ function AutoPlantPlace()
             local Player = game:GetService("Players").LocalPlayer
             for _, v in pairs(workspace.Deployables:GetChildren()) do
                 if v.Name == "Plant Box" then
-                    if (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < plantingrange1 then
+                    if v:FindFirstChild(toplant) == nil and (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < plantingrange1 then
                         game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
                     end
                 end
@@ -454,8 +454,8 @@ function AutoPlantPickup()
             task.wait(autoplantpickupwaittime)
             local Player = game:GetService("Players").LocalPlayer
             for _, v in pairs(workspace:GetChildren()) do
-                if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" then
-                    if (Player.Character.Head.Position - v.PrimaryPart.Position).magnitude < 60 then
+                if v.Name == ''..toplant.. " Bush" or v.Name == ''..toplant.. " Crop" or v.Name == ''..toplant.. " Tree" or v.Name == ''..toplant.. " Patch Crop" and v:FindFirstChild('PrimaryPart') then
+                    if (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < 25 then
                         game.ReplicatedStorage.Events.Pickup:FireServer(v)
                     end
                 end
@@ -1215,26 +1215,52 @@ local planting = Farming:AddSection({
    Name = "Planting" 
 })
 
-Farming:AddSlider({
-	Name = "Plant Range",
-	Min = 1,
-	Max = 60,
-	Default = 25,
-	Color = Color3.fromRGB(86, 36, 36),
-	Increment = 1,
-	ValueName = "Magnitude",
-	Callback = function(Value)
-		plantingrange1  = Value
-	end    
-})
-
 Farming:AddDropdown({
 	Name = "Crop Type",
 	Default = "Bloodfruit",
 	Options = {"Bloodfruit", "Bluefruit", "Jelly", "Lemon", "Sunfruit", "Strangefruit", "Oddberry", "Pumpkin"},
 	Callback = function(Value)
 		toplant = Value
-	end    
+		if toplant == 'None' then
+            __color = Color3.fromRGB(100, 100, 100)
+        elseif toplant == 'Bloodfruit' then
+            __color = Color3.fromRGB(86, 36, 36)
+        elseif toplant == 'Bluefruit' then
+            __color = Color3.fromRGB(0, 81, 135)
+        elseif toplant == 'Jelly' then
+            __color = Color3.fromRGB(40, 0, 135)
+        elseif toplant == 'Lemon' then
+            __color = Color3.fromRGB(135, 145, 35)
+        elseif toplant == 'Sunfruit' then
+            __color = Color3.fromRGB(150, 130, 35)
+        elseif toplant == 'Strangefruit' then
+            __color = Color3.fromRGB(35, 100, 150)
+        elseif toplant == 'Oddberry' then
+            __color = Color3.fromRGB(150, 35, 100)
+        elseif toplant == 'Pumpkin' then
+            __color = Color3.fromRGB(200, 130, 0)
+        end
+        for i, v in pairs(game.CoreGui.Orion:GetDescendants()) do
+            if v:IsA('TextLabel') then
+                if v.Text == 'Plant Range' then
+                    v = v.Parent
+                    v.Frame.UIStroke.Color = __color
+                    v.Frame.BackgroundColor3 = __color
+                    v.Frame.Frame.BackgroundColor3 = __color
+                end
+            end
+        end
+        for i, v in pairs(game.CoreGui.Orion:GetDescendants()) do
+            if v:IsA('TextLabel') then
+                if v.Text == 'Auto Plant/Pickup Crop Wait Time' then
+                    v = v.Parent
+                    v.Frame.UIStroke.Color = __color
+                    v.Frame.BackgroundColor3 = __color
+                    v.Frame.Frame.BackgroundColor3 = __color
+                end
+            end
+        end
+	end
 })
 
 Farming:AddBind({
@@ -1273,12 +1299,27 @@ Farming:AddToggle({
 	end    
 })
 
+Farming:AddParagraph('for minimal lag, open food section in inventory', '')
+
+PlantRangeSlider = Farming:AddSlider({
+	Name = "Plant Range",
+	Min = 1,
+	Max = 60,
+	Default = 25,
+	Color = __color,
+	Increment = 1,
+	ValueName = "Magnitude",
+	Callback = function(Value)
+		plantingrange1  = Value
+	end    
+})
+
 Farming:AddSlider({
 	Name = "Auto Plant/Pickup Crop Wait Time",
 	Min = 0.1,
 	Max = 5,
 	Default = 1,
-	Color = Color3.fromRGB(86, 36, 36),
+	Color = __color,
 	Increment = 0.1,
 	ValueName = "Seconds",
 	Callback = function(Value)
