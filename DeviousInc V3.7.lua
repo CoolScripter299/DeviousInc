@@ -425,7 +425,7 @@ function AutoPlant()
     local Player = game:GetService("Players").LocalPlayer
     for _, v in pairs(workspace.Deployables:GetChildren()) do
         if v.Name == "Plant Box" then
-            if (Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < plantingrange1 then
+            if v:FindFirstChild(toplant) == nil and(Player.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < plantingrange1 then
                 game.ReplicatedStorage.Events.InteractStructure:FireServer(v, toplant)
             end
         end
