@@ -1221,45 +1221,6 @@ Farming:AddDropdown({
 	Options = {"Bloodfruit", "Bluefruit", "Jelly", "Lemon", "Sunfruit", "Strangefruit", "Oddberry", "Pumpkin"},
 	Callback = function(Value)
 		toplant = Value
-		if toplant == 'None' then
-            __color = Color3.fromRGB(100, 100, 100)
-        elseif toplant == 'Bloodfruit' then
-            __color = Color3.fromRGB(86, 36, 36)
-        elseif toplant == 'Bluefruit' then
-            __color = Color3.fromRGB(0, 81, 135)
-        elseif toplant == 'Jelly' then
-            __color = Color3.fromRGB(40, 0, 135)
-        elseif toplant == 'Lemon' then
-            __color = Color3.fromRGB(135, 145, 35)
-        elseif toplant == 'Sunfruit' then
-            __color = Color3.fromRGB(150, 130, 35)
-        elseif toplant == 'Strangefruit' then
-            __color = Color3.fromRGB(35, 100, 150)
-        elseif toplant == 'Oddberry' then
-            __color = Color3.fromRGB(150, 35, 100)
-        elseif toplant == 'Pumpkin' then
-            __color = Color3.fromRGB(200, 130, 0)
-        end
-        for i, v in pairs(game.CoreGui.Orion:GetDescendants()) do
-            if v:IsA('TextLabel') then
-                if v.Text == 'Plant Range' then
-                    v = v.Parent
-                    v.Frame.UIStroke.Color = __color
-                    v.Frame.BackgroundColor3 = __color
-                    v.Frame.Frame.BackgroundColor3 = __color
-                end
-            end
-        end
-        for i, v in pairs(game.CoreGui.Orion:GetDescendants()) do
-            if v:IsA('TextLabel') then
-                if v.Text == 'Auto Plant/Pickup Crop Wait Time' then
-                    v = v.Parent
-                    v.Frame.UIStroke.Color = __color
-                    v.Frame.BackgroundColor3 = __color
-                    v.Frame.Frame.BackgroundColor3 = __color
-                end
-            end
-        end
 	end
 })
 
@@ -1306,7 +1267,7 @@ PlantRangeSlider = Farming:AddSlider({
 	Min = 1,
 	Max = 60,
 	Default = 25,
-	Color = __color,
+	Color = Color3.fromRGB(255,165,0),
 	Increment = 1,
 	ValueName = "Magnitude",
 	Callback = function(Value)
@@ -1319,7 +1280,7 @@ Farming:AddSlider({
 	Min = 0.1,
 	Max = 5,
 	Default = 1,
-	Color = __color,
+	Color = Color3.fromRGB(255,165,0),
 	Increment = 0.1,
 	ValueName = "Seconds",
 	Callback = function(Value)
